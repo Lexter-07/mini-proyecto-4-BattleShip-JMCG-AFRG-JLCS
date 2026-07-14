@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.StartGameController">
+   <children>
+      <GridPane gridLinesVisible="true" layoutX="270.0" layoutY="90.0" prefHeight="400.0" prefWidth="400.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <Label layoutX="283.0" layoutY="57.0" text="1    2    3">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="403.0" layoutY="57.0" text="4    5    6">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="247.0" layoutY="94.0" text="A">
+         <font>
+            <Font name="Microsoft New Tai Lue" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="248.0" layoutY="134.0" text="B">
+         <font>
+            <Font name="Microsoft New Tai Lue" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="248.0" layoutY="174.0" text="C">
+         <font>
+            <Font name="Microsoft New Tai Lue" size="24.0" />
+         </font>
+      </Label>
+      <Button layoutX="430.0" layoutY="522.0" mnemonicParsing="false" onAction="#onHandleConfirm" text="Confirmar">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <VBox layoutX="30.0" layoutY="244.0" prefHeight="200.0" prefWidth="211.0" spacing="10.0">
+         <children>
+            <Rectangle fx:id="Ship2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="78.0" onMouseDragged="#onHandleDraggedShip2" onMousePressed="#onHandlePressedShip2" stroke="BLACK" strokeType="INSIDE" width="40.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="42.0" onMouseDragged="#onHandleDragged" onMousePressed="#onHandlePressedShip" stroke="BLACK" strokeType="INSIDE" width="192.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
