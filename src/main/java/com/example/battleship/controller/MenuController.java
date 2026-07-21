@@ -13,4 +13,10 @@ public class MenuController {
     void onHandleNewGame(ActionEvent event) throws IOException {
         SceneManager.changeScene(Path.startGameView);
     }
+
+    public void onHandleContinue(ActionEvent actionEvent) {
+    }
+
+    public void onHandleExit(ActionEvent actionEvent) {
+    }
 }

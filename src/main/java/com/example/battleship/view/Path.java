@@ -15,7 +15,7 @@ package com.example.battleship.view;
  */
 
 public class Path {
-    public static final String menuView = "/com/example/battleship/menu-view.fxml";
-    public static final String startGameView = "/com/example/battleship/startGame-view.fxml";
-    public static final String attackView = "/com/example/battleship/attack-view.fxml";
+    public static final String menuView = "/com/example/battleship/FXML/menu.fxml";
+    public static final String startGameView = "/com/example/battleship/FXML/startGame-view.fxml";
+    public static final String attackView = "/com/example/battleship/FXML/attack-view.fxml";
 }
