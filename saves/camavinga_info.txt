@@ -1,0 +1,4 @@
+Nickname: camavinga
+Human Sunk Ships: 1
+Machine Sunk Ships: 1
+Human Turn: true

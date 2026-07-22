@@ -1,0 +1,4 @@
+Nickname: joselito
+Human Sunk Ships: 9
+Machine Sunk Ships: 9
+Human Turn: true

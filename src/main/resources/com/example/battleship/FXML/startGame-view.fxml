@@ -68,7 +68,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="107.0" layoutY="514.0" mnemonicParsing="false" onAction="#onHandleRotate" text="Rotar">
+      <Button layoutX="73.0" layoutY="515.0" mnemonicParsing="false" onAction="#onHandleRotate" text="Rotar">
          <font>
             <Font size="14.0" />
          </font>
@@ -123,5 +123,10 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
          </children>
       </StackPane>
+      <Button layoutX="142.0" layoutY="515.0" mnemonicParsing="false" onAction="#onHandleAutoPlace" text=" Auto ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

@@ -2,22 +2,36 @@ package com.example.battleship.controller;
 
 import com.example.battleship.model.*;
 import com.example.battleship.model.enums.AttackResult;
+import com.example.battleship.model.enums.Orientation;
 import com.example.battleship.model.threads.AutoSaveThread;
 import com.example.battleship.model.threads.IAThread;
 import com.example.battleship.model.threads.TurnThread;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+import java.util.HashMap;
 
 public class AttackController {
 
     @FXML private GridPane enemyGrid;
     @FXML private GridPane playerGrid;
 
+    @FXML private AnchorPane battleAnchorPane;
+
     private final Button[][] enemyButtons = new Button[SeaMap.ROWS][SeaMap.COLUMNS];
     private final Button[][] playerButtons = new Button[SeaMap.ROWS][SeaMap.COLUMNS];
+    private final HashMap<Ship, Rectangle> enemyShipViews = new HashMap<>();
+    // private final HashMap<Ship, StackPane> enemyShipViews = new HashMap<>();
 
     private GameModel gameModel;
     private IAThread iaThread;
@@ -27,6 +41,7 @@ public class AttackController {
     @FXML
     public void initialize() {
         createGrids();
+
     }
 
     /**
@@ -37,6 +52,7 @@ public class AttackController {
 
         drawPlayerShips();
         restorePreviousShots();
+
 
         // Initialize and start background threads
         autoSaveThread = new AutoSaveThread(gameModel);
@@ -57,6 +73,9 @@ public class AttackController {
         if (!gameModel.isGameStarted()) {
             gameModel.startGame();
         }
+
+        createEnemyFleetView();
+        printPlayerFleet();
     }
 
     private void createGrids() {
@@ -94,10 +113,103 @@ public class AttackController {
         for (Ship ship : humanMap.getShips()) {
             for (Coordinate coord : ship.getPositions()) {
                 Button btn = playerButtons[coord.getRow()][coord.getColumn()];
-                btn.setStyle("-fx-background-radius: 0; -fx-background-color: #2f3640; -fx-border-color: #718093;");
+                btn.setStyle("-fx-background-radius: 0; -fx-background-color: green; -fx-border-color: #718093;");
             }
         }
     }
+
+
+
+
+    private void createEnemyFleetView() {
+
+        enemyShipViews.clear();
+
+        double cellWidth = enemyGrid.getPrefWidth() / SeaMap.COLUMNS;
+        double cellHeight = enemyGrid.getPrefHeight() / SeaMap.ROWS;
+
+        for (Ship ship : gameModel.getMachinePlayer()
+                .getSeaMap()
+                .getShips()) {
+
+            Rectangle rectangle = new Rectangle();
+
+            if (ship.getOrientation() == Orientation.HORIZONTAL) {
+
+                rectangle.setWidth((ship.getSize() * cellWidth)-10);
+                rectangle.setHeight(cellHeight - 10);
+
+            } else {
+
+                rectangle.setWidth(cellWidth - 10);
+                rectangle.setHeight((ship.getSize() * cellHeight) - 10);
+
+            }
+
+            rectangle.setFill(Color.DARKRED);
+            rectangle.setOpacity(0.45);
+            rectangle.setVisible(false);
+
+            enemyShipViews.put(ship, rectangle);
+
+            battleAnchorPane.getChildren().add(rectangle);
+
+            positionEnemyShip(rectangle, ship);
+        }
+
+    }
+
+
+
+
+    private void positionEnemyShip(Rectangle rectangle, Ship ship) {
+
+        Coordinate start = ship.getStartCoordinate();
+
+        double cellWidth = enemyGrid.getWidth() / SeaMap.COLUMNS;
+        double cellHeight = enemyGrid.getHeight() / SeaMap.ROWS;
+
+        Bounds gridBounds =
+                enemyGrid.localToScene(enemyGrid.getBoundsInLocal());
+
+        double sceneX =
+                gridBounds.getMinX()
+                        + start.getColumn() * cellWidth + 4;
+
+        double sceneY =
+                gridBounds.getMinY()
+                        + start.getRow() * cellHeight + 4;
+
+        Point2D point =
+                battleAnchorPane.sceneToLocal(sceneX, sceneY);
+
+        rectangle.setLayoutX(point.getX());
+        rectangle.setLayoutY(point.getY());
+
+    }
+
+
+    private void showEnemyFleet(boolean visible) {
+
+        for (Rectangle rectangle : enemyShipViews.values()) {
+            rectangle.setVisible(visible);
+        }
+
+    }
+
+
+
+    @FXML
+    private void onShowEnemyFleet(MouseEvent event) {
+        showEnemyFleet(true);
+    }
+
+    @FXML
+    private void onHideEnemyFleet(MouseEvent event) {
+        showEnemyFleet(false);
+    }
+
+
 
     /**
      * Restores visual state if a game was loaded from disk.
@@ -214,6 +326,27 @@ public class AttackController {
         }
         button.setDisable(true);
     }
+
+
+    private void printPlayerFleet() {
+
+        System.out.println("\n========== HUMAN FLEET ==========");
+
+        for (Ship ship : gameModel.getHumanPlayer()
+                .getSeaMap()
+                .getShips()) {
+
+            System.out.print(ship.getType() + " -> ");
+
+            for (Coordinate coordinate : ship.getPositions()) {
+                System.out.print("(" + coordinate.getRow() + "," + coordinate.getColumn() + ") ");
+
+            }
+            System.out.println();
+        }
+        System.out.println("=================================\n");
+    }
+
 
     private void checkGameEnd() {
         if (gameModel.hasWinner()) {

@@ -98,41 +98,42 @@ public class StartGameController {
      * en lugar de intentar usar un "setShip" que no existe en ShipView.
      */
     private void restorePlacedShips(List<Ship> loadedShips) {
+
         List<Ship> unassignedShips = new ArrayList<>(loadedShips);
 
-        // Clonamos las llaves para poder reemplazar los valores en el HashMap de forma segura
-        List<StackPane> panes = new ArrayList<>(shipViews.keySet());
+        List<StackPane> panes =
+                new ArrayList<>(shipViews.keySet());
 
         for (StackPane pane : panes) {
-            ShipView currentView = shipViews.get(pane);
-            ShipType type = currentView.getShip().getType();
 
-            Ship matchingLoadedShip = null;
+            ShipView currentView = shipViews.get(pane);
+
+            Ship matchingShip = null;
+
             for (Ship loadedShip : unassignedShips) {
-                if (loadedShip.getType() == type) {
-                    matchingLoadedShip = loadedShip;
+
+                if (loadedShip.getType()
+                        == currentView.getShip().getType()) {
+
+                    matchingShip = loadedShip;
                     break;
                 }
             }
 
-            if (matchingLoadedShip != null) {
-                unassignedShips.remove(matchingLoadedShip);
+            if (matchingShip != null) {
 
-                // Creamos un nuevo ShipView con el barco ya cargado del disco
-                ShipView restoredView = new ShipView(pane, matchingLoadedShip);
-                restoredView.setOriginalPosition(currentView.getOriginalPosition());
+                unassignedShips.remove(matchingShip);
 
-                // Reemplazamos en el mapa
-                shipViews.put(pane, restoredView);
+                ShipView restored =
+                        new ShipView(pane, matchingShip);
 
-                if (matchingLoadedShip.isPlaced()) {
-                    if (matchingLoadedShip.getOrientation() == Orientation.VERTICAL) {
-                        restoredView.rotate(); // Usa el método de tu clase ShipView
-                    }
-                    snapShipVisual(restoredView, matchingLoadedShip.getStartCoordinate());
-                }
+                restored.setOriginalPosition(
+                        currentView.getOriginalPosition());
+
+                shipViews.put(pane, restored);
             }
         }
+        refreshFleetView();
     }
 
     @FXML
@@ -243,6 +244,27 @@ public class StartGameController {
                 && mouseY <= gridBounds.getMaxY();
     }
 
+
+    private void refreshFleetView() {
+
+        for (ShipView shipView : shipViews.values()) {
+            Ship ship = shipView.getShip();
+
+            if (!ship.isPlaced()) {
+                continue;
+            }
+
+            shipView.rotate();
+
+            snapShipVisual(
+                    shipView,
+                    ship.getStartCoordinate()
+            );
+        }
+        enableConfirmButton();
+    }
+
+
     @FXML
     void onHandleRotate(ActionEvent event) {
         if (selectedShipView == null) return;
@@ -265,10 +287,19 @@ public class StartGameController {
         gameModel.saveGame();
     }
 
-    private void enableConfirmButton() {
-        if (gameModel == null) return;
-        confirmButton.setDisable(!gameModel.getHumanPlayer().getSeaMap().hasAllShipsPlaced());
+
+
+    @FXML
+    private void onHandleAutoPlace(ActionEvent event) {
+        List<Ship> ships = new ArrayList<>();
+
+        for (ShipView shipView : shipViews.values()) {
+            ships.add(shipView.getShip());
+        }
+        gameModel.autoPlaceHumanFleet(ships);
+        refreshFleetView();
     }
+
 
     @FXML
     void onHandleConfirm(ActionEvent event) throws IOException {
@@ -281,5 +312,10 @@ public class StartGameController {
         FXMLLoader loader = SceneManager.changeScene(Path.attackView);
         AttackController controller = loader.getController();
         controller.setGameModel(gameModel);
+    }
+
+    private void enableConfirmButton() {
+        if (gameModel == null) return;
+        confirmButton.setDisable(!gameModel.getHumanPlayer().getSeaMap().hasAllShipsPlaced());
     }
 }

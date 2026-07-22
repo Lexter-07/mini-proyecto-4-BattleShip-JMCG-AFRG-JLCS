@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.AttackController">
+<AnchorPane fx:id="battleAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.AttackController">
    <children>
       <GridPane fx:id="enemyGrid" alignment="CENTER" gridLinesVisible="true" layoutX="565.0" layoutY="90.0" prefHeight="400.0" prefWidth="400.0">
          <columnConstraints>
@@ -136,7 +136,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <Button layoutX="948.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-radius: 40; -fx-border-radius: 40;" text=" ? ">
+      <Button layoutX="948.0" layoutY="20.0" mnemonicParsing="false" onMousePressed="#onShowEnemyFleet" onMouseReleased="#onHideEnemyFleet" style="-fx-background-radius: 40; -fx-border-radius: 40;" text=" ? ">
          <font>
             <Font size="15.0" />
          </font>

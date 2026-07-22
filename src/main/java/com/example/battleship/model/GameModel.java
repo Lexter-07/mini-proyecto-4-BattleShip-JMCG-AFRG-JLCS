@@ -6,6 +6,8 @@ import com.example.battleship.model.enums.PlacementResult;
 import com.example.battleship.model.enums.ShipType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -31,7 +33,9 @@ public class GameModel implements Serializable {
      */
     public void newGame(String nickname) {
         gameStatus = new GameStatus(nickname);
-        createMachineFleet();
+
+        FleetGenerator.generate(
+                gameStatus.getMachinePlayer().getSeaMap(), FleetGenerator.createFleet());
     }
 
     // ===========================
@@ -103,6 +107,16 @@ public class GameModel implements Serializable {
         return gameStatus.getHumanPlayer()
                 .getSeaMap()
                 .placeShip(ship, start, orientation);
+    }
+
+
+    /**
+     * Coloca automáticamente la flota del jugador humano.
+     */
+    public void autoPlaceHumanFleet(List<Ship> ships) {
+        FleetGenerator.generate(
+                gameStatus.getHumanPlayer().getSeaMap(),
+                ships);
     }
 
     /**
@@ -177,40 +191,14 @@ public class GameModel implements Serializable {
                 .size() == 10;
     }
 
-    private void createMachineFleet() {
-        placeMachineShip(ShipType.AIRCRAFT);
-        placeMachineShip(ShipType.SUBMARINE);
-        placeMachineShip(ShipType.SUBMARINE);
-        placeMachineShip(ShipType.DESTROYER);
-        placeMachineShip(ShipType.DESTROYER);
-        placeMachineShip(ShipType.DESTROYER);
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-    }
+
+    // h
+    // h
+    // h
+    // h
 
 
-    private void placeMachineShip(ShipType type) {
-        Ship ship = new Ship(type);
-        PlacementResult result;
 
-        do {
-            int row = random.nextInt(SeaMap.ROWS);
-            int column = random.nextInt(SeaMap.COLUMNS);
-            Orientation orientation = random.nextBoolean() ? Orientation.HORIZONTAL : Orientation.VERTICAL;
-
-            result = gameStatus
-                    .getMachinePlayer()
-                    .getSeaMap()
-                    .placeShip(
-                            ship,
-                            new Coordinate(row, column),
-                            orientation
-                    );
-
-        } while (result != PlacementResult.SUCCESS);
-    }
 
     /**
      * Validate if machine ya colocó todos sus barcos.

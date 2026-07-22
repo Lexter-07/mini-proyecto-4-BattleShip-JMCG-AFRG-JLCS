@@ -138,15 +138,6 @@ public class SeaMap implements Serializable {
             }
         }
 
-        System.out.println(
-                "Colocando "
-                        + ship.getType()
-                        + " en "
-                        + start
-                        + " orientación "
-                        + orientation
-        );
-
         return PlacementResult.SUCCESS;
     }
 
