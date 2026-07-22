@@ -1,9 +1,6 @@
 package com.example.battleship.controller;
 
-import com.example.battleship.model.Coordinate;
-import com.example.battleship.model.GameModel;
-import com.example.battleship.model.SeaMap;
-import com.example.battleship.model.Ship;
+import com.example.battleship.model.*;
 import com.example.battleship.model.enums.Orientation;
 import com.example.battleship.model.enums.PlacementResult;
 import com.example.battleship.model.enums.ShipType;
@@ -15,22 +12,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StartGameController {
 
-    @FXML
-    private AnchorPane rootPane;
-
+    @FXML private AnchorPane rootPane;
     @FXML private StackPane Aircraft;
     @FXML private StackPane Destroyer1;
     @FXML private StackPane Destroyer2;
@@ -41,120 +37,127 @@ public class StartGameController {
     @FXML private StackPane Frigate4;
     @FXML private StackPane Submarine1;
     @FXML private StackPane Submarine2;
-
-    @FXML
-    private GridPane seaGrid;
-
-    @FXML
-    private Button confirmButton;
+    @FXML private GridPane seaGrid;
+    @FXML private Button confirmButton;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
     private GameModel gameModel;
-    private final HashMap<StackPane, ShipView> shipViews = new HashMap<>();
 
+    // Almacena las instancias de ShipView proporcionadas en tu paquete View
+    private final HashMap<StackPane, ShipView> shipViews = new HashMap<>();
     private ShipView selectedShipView;
 
-
-
-    private void moveShip(MouseEvent event) {
-        StackPane pane = (StackPane) event.getSource();
-        Point2D point = rootPane.sceneToLocal(
-                event.getSceneX(),
-                event.getSceneY()
-        );
-
-        pane.setLayoutX(point.getX() - xOffset);
-        pane.setLayoutY(point.getY() - yOffset);
-
+    @FXML
+    public void initialize() {
+        createDefaultShipViews();
+        confirmButton.setDisable(true);
     }
-    private void pressedShip(MouseEvent event) {
+
+    /**
+     * Inyecta el modelo del juego.
+     * Si la partida tiene barcos ya colocados (cargada del disco), los restaura.
+     */
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+
+        List<Ship> placedShips = gameModel.getHumanPlayer().getSeaMap().getShips();
+        if (!placedShips.isEmpty()) {
+            restorePlacedShips(placedShips);
+        }
+
+        enableConfirmButton();
+    }
+
+    /**
+     * Crea los ShipViews iniciales para una partida nueva usando constructores limpios.
+     */
+    private void createDefaultShipViews() {
+        registerShipView(Aircraft, ShipType.AIRCRAFT);
+        registerShipView(Submarine1, ShipType.SUBMARINE);
+        registerShipView(Submarine2, ShipType.SUBMARINE);
+        registerShipView(Destroyer1, ShipType.DESTROYER);
+        registerShipView(Destroyer2, ShipType.DESTROYER);
+        registerShipView(Destroyer3, ShipType.DESTROYER);
+        registerShipView(Frigate1, ShipType.FRIGATE);
+        registerShipView(Frigate2, ShipType.FRIGATE);
+        registerShipView(Frigate3, ShipType.FRIGATE);
+        registerShipView(Frigate4, ShipType.FRIGATE);
+    }
+
+    private void registerShipView(StackPane pane, ShipType type) {
+        Ship newShip = new Ship(type);
+        ShipView view = new ShipView(pane, newShip);
+        view.setOriginalPosition(new Point2D(pane.getLayoutX(), pane.getLayoutY()));
+        shipViews.put(pane, view);
+    }
+
+    /**
+     * Si la partida fue cargada, recrea los ShipViews usando los barcos reales del modelo
+     * en lugar de intentar usar un "setShip" que no existe en ShipView.
+     */
+    private void restorePlacedShips(List<Ship> loadedShips) {
+        List<Ship> unassignedShips = new ArrayList<>(loadedShips);
+
+        // Clonamos las llaves para poder reemplazar los valores en el HashMap de forma segura
+        List<StackPane> panes = new ArrayList<>(shipViews.keySet());
+
+        for (StackPane pane : panes) {
+            ShipView currentView = shipViews.get(pane);
+            ShipType type = currentView.getShip().getType();
+
+            Ship matchingLoadedShip = null;
+            for (Ship loadedShip : unassignedShips) {
+                if (loadedShip.getType() == type) {
+                    matchingLoadedShip = loadedShip;
+                    break;
+                }
+            }
+
+            if (matchingLoadedShip != null) {
+                unassignedShips.remove(matchingLoadedShip);
+
+                // Creamos un nuevo ShipView con el barco ya cargado del disco
+                ShipView restoredView = new ShipView(pane, matchingLoadedShip);
+                restoredView.setOriginalPosition(currentView.getOriginalPosition());
+
+                // Reemplazamos en el mapa
+                shipViews.put(pane, restoredView);
+
+                if (matchingLoadedShip.isPlaced()) {
+                    if (matchingLoadedShip.getOrientation() == Orientation.VERTICAL) {
+                        restoredView.rotate(); // Usa el método de tu clase ShipView
+                    }
+                    snapShipVisual(restoredView, matchingLoadedShip.getStartCoordinate());
+                }
+            }
+        }
+    }
+
+    @FXML
+    void onMousePressedShip(MouseEvent event) {
         StackPane pane = (StackPane) event.getSource();
         selectedShipView = shipViews.get(pane);
 
-        Point2D point = rootPane.sceneToLocal(
-                event.getSceneX(),
-                event.getSceneY()
-        );
-
+        Point2D point = rootPane.sceneToLocal(event.getSceneX(), event.getSceneY());
         xOffset = point.getX() - pane.getLayoutX();
         yOffset = point.getY() - pane.getLayoutY();
     }
 
-    //bounds
-
-    @FXML
-    public void initialize() {
-
-        gameModel = new GameModel();
-        gameModel.newGame("Paco");
-
-        createShips();
-        saveOriginalPositions();
-
-    }
-
-
-    private void createShips() {
-        shipViews.put(Aircraft,
-                new ShipView(Aircraft, new Ship(ShipType.AIRCRAFT)));
-
-        shipViews.put(Submarine1,
-                new ShipView(Submarine1, new Ship(ShipType.SUBMARINE)));
-
-        shipViews.put(Submarine2,
-                new ShipView(Submarine2, new Ship(ShipType.SUBMARINE)));
-
-        shipViews.put(Destroyer1,
-                new ShipView(Destroyer1, new Ship(ShipType.DESTROYER)));
-
-        shipViews.put(Destroyer2,
-                new ShipView(Destroyer2, new Ship(ShipType.DESTROYER)));
-
-        shipViews.put(Destroyer3,
-                new ShipView(Destroyer3, new Ship(ShipType.DESTROYER)));
-
-        shipViews.put(Frigate1,
-                new ShipView(Frigate1, new Ship(ShipType.FRIGATE)));
-
-        shipViews.put(Frigate2,
-                new ShipView(Frigate2, new Ship(ShipType.FRIGATE)));
-
-        shipViews.put(Frigate3,
-                new ShipView(Frigate3, new Ship(ShipType.FRIGATE)));
-
-        shipViews.put(Frigate4,
-                new ShipView(Frigate4, new Ship(ShipType.FRIGATE)));
-    }
-
-    private void saveOriginalPositions() {
-
-        for(ShipView shipView : shipViews.values()) {
-            shipView.setOriginalPosition(
-                    new Point2D(
-                            shipView.getView().getLayoutX(),
-                            shipView.getView().getLayoutY()
-                    )
-            );
-        }
-    }
-
-
-
     @FXML
     void onMouseDragged(MouseEvent event) {
-        moveShip(event);
-    }
-    @FXML
-    void onMousePressedShip(MouseEvent event) {
-        pressedShip(event);
+        if (selectedShipView == null) return;
+        StackPane pane = (StackPane) event.getSource();
+
+        Point2D point = rootPane.sceneToLocal(event.getSceneX(), event.getSceneY());
+        pane.setLayoutX(point.getX() - xOffset);
+        pane.setLayoutY(point.getY() - yOffset);
     }
 
     @FXML
     void onMouseReleased(MouseEvent event) {
-
-        StackPane pane = (StackPane) event.getSource();
+        if (selectedShipView == null) return;
 
         if (!isInsideGrid(event)) {
             returnToOrigin();
@@ -162,68 +165,41 @@ public class StartGameController {
         }
 
         Coordinate coordinate = calculateCoordinate();
-
-        PlacementResult result =
-                gameModel.placeShip(
-                        selectedShipView.getShip(),
-                        coordinate,
-                        selectedShipView.getShip().getOrientation()
-                );
-
-        System.out.println("Coordenada: " + coordinate);
-        System.out.println("Resultado: " + result);
+        PlacementResult result = gameModel.placeShip(
+                selectedShipView.getShip(),
+                coordinate,
+                selectedShipView.getShip().getOrientation()
+        );
 
         if (result != PlacementResult.SUCCESS) {
             returnToOrigin();
             return;
         }
 
-        snapShip(coordinate);
+        snapShipVisual(selectedShipView, coordinate);
 
+        gameModel.saveGame();
         enableConfirmButton();
-
     }
 
-
-    private void snapShip(Coordinate coordinate) {
-        StackPane pane = selectedShipView.getView();
-
+    private void snapShipVisual(ShipView shipView, Coordinate coordinate) {
+        StackPane pane = shipView.getView();
         double cellWidth = seaGrid.getWidth() / SeaMap.COLUMNS;
         double cellHeight = seaGrid.getHeight() / SeaMap.ROWS;
 
-        Bounds gridBounds =
-                seaGrid.localToScene(seaGrid.getBoundsInLocal());
-
-        double sceneX =
-                gridBounds.getMinX() + coordinate.getColumn() * cellWidth;
-
-        double sceneY =
-                gridBounds.getMinY() + coordinate.getRow() * cellHeight;
+        Bounds gridBounds = seaGrid.localToScene(seaGrid.getBoundsInLocal());
+        double sceneX = gridBounds.getMinX() + coordinate.getColumn() * cellWidth;
+        double sceneY = gridBounds.getMinY() + coordinate.getRow() * cellHeight;
 
         Point2D point = rootPane.sceneToLocal(sceneX, sceneY);
-
-        System.out.println("Ship: " + selectedShipView.getShip().getType());
-        System.out.println("Orientation: " + selectedShipView.getShip().getOrientation());
-        System.out.println("Coordinate: " + coordinate);
-        System.out.println("Pane W: " + pane.getWidth());
-        System.out.println("Pane H: " + pane.getHeight());
-
-        System.out.println(pane.getBoundsInLocal());
-        System.out.println(pane.getBoundsInParent());
-
         pane.setLayoutX(point.getX());
         pane.setLayoutY(point.getY());
-
     }
 
     private Coordinate calculateCoordinate() {
         StackPane pane = selectedShipView.getView();
-
-        Bounds gridBounds =
-                seaGrid.localToScene(seaGrid.getBoundsInLocal());
-
-        Point2D paneScene =
-                rootPane.localToScene(pane.getLayoutX(), pane.getLayoutY());
+        Bounds gridBounds = seaGrid.localToScene(seaGrid.getBoundsInLocal());
+        Point2D paneScene = rootPane.localToScene(pane.getLayoutX(), pane.getLayoutY());
 
         double localX = paneScene.getX() - gridBounds.getMinX();
         double localY = paneScene.getY() - gridBounds.getMinY();
@@ -235,32 +211,29 @@ public class StartGameController {
         int row = (int)(localY / cellHeight);
 
         return new Coordinate(row, column);
-
     }
 
     private void returnToOrigin() {
-
         StackPane pane = selectedShipView.getView();
         Point2D origin = selectedShipView.getOriginalPosition();
 
         gameModel.unplaceShip(selectedShipView.getShip());
         enableConfirmButton();
+        gameModel.saveGame();
 
-        selectedShipView.getShip().setOrientation(
-                Orientation.HORIZONTAL
-        );
+        selectedShipView.getShip().setOrientation(Orientation.HORIZONTAL);
 
-        selectedShipView.rotate();
+        // Deshacer rotación visual si estaba en vertical
+        if (pane.getPrefHeight() > pane.getPrefWidth()) {
+            selectedShipView.rotate();
+        }
 
         pane.setLayoutX(origin.getX());
         pane.setLayoutY(origin.getY());
     }
 
     private boolean isInsideGrid(MouseEvent event) {
-
-        Bounds gridBounds =
-                seaGrid.localToScene(seaGrid.getBoundsInLocal());
-
+        Bounds gridBounds = seaGrid.localToScene(seaGrid.getBoundsInLocal());
         double mouseX = event.getSceneX();
         double mouseY = event.getSceneY();
 
@@ -268,76 +241,45 @@ public class StartGameController {
                 && mouseX <= gridBounds.getMaxX()
                 && mouseY >= gridBounds.getMinY()
                 && mouseY <= gridBounds.getMaxY();
-
     }
-
-    private boolean allShipsPlaced() {
-        return gameModel
-                .getHumanPlayer()
-                .getSeaMap()
-                .hasAllShipsPlaced();
-
-    }
-
 
     @FXML
     void onHandleRotate(ActionEvent event) {
-
-        if (selectedShipView == null) {
-            return;
-        }
+        if (selectedShipView == null) return;
 
         Ship ship = selectedShipView.getShip();
-
-        Orientation newOrientation =
-                (ship.getOrientation() == Orientation.HORIZONTAL)
-                        ? Orientation.VERTICAL
-                        : Orientation.HORIZONTAL;
+        Orientation newOrientation = (ship.getOrientation() == Orientation.HORIZONTAL)
+                ? Orientation.VERTICAL
+                : Orientation.HORIZONTAL;
 
         Coordinate coordinate = calculateCoordinate();
+        PlacementResult result = gameModel.placeShip(ship, coordinate, newOrientation);
 
-        PlacementResult result =
-                gameModel.placeShip(
-                        ship,
-                        coordinate,
-                        newOrientation
-                );
-
-        if (result != PlacementResult.SUCCESS) {
-            return; // No gira porque se saldría del tablero
-        }
+        if (result != PlacementResult.SUCCESS) return;
 
         ship.setOrientation(newOrientation);
+        selectedShipView.rotate(); // Llama al método de tu clase ShipView
 
-        gameModel.placeShip(
-                ship,
-                coordinate,
-                newOrientation
-        );
+        snapShipVisual(selectedShipView, coordinate);
 
-        selectedShipView.rotate();
-
-        snapShip(coordinate);
+        gameModel.saveGame();
     }
 
-
     private void enableConfirmButton() {
-        confirmButton.setDisable(
-                !gameModel
-                        .getHumanPlayer()
-                        .getSeaMap()
-                        .hasAllShipsPlaced()
-        );
-
+        if (gameModel == null) return;
+        confirmButton.setDisable(!gameModel.getHumanPlayer().getSeaMap().hasAllShipsPlaced());
     }
 
     @FXML
     void onHandleConfirm(ActionEvent event) throws IOException {
-        if (!allShipsPlaced()) return;
-        FXMLLoader loader = SceneManager.changeScene(Path.attackView);
+        if (!gameModel.getHumanPlayer().getSeaMap().hasAllShipsPlaced()) return;
 
+        gameModel.startGame();
+        gameModel.saveGame();
+
+        // Usa la ruta definida en tu archivo Path
+        FXMLLoader loader = SceneManager.changeScene(Path.attackView);
         AttackController controller = loader.getController();
         controller.setGameModel(gameModel);
     }
-
 }
