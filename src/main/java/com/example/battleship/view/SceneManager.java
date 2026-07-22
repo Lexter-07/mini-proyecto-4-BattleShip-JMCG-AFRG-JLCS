@@ -16,17 +16,26 @@ public class SceneManager {
         stage =  primaryStage;
     }
 
-    public static void changeScene(String fxmlFileName) throws IOException {
+
+    public static FXMLLoader changeScene(String fxmlFileName) throws IOException {
         if (stage == null) {
             throw new IllegalStateException("SceneManager no inicializado.");
         }
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(
-                com.example.battleship.view.SceneManager.class.getResource(fxmlFileName)
-        ));
+        FXMLLoader loader = new FXMLLoader(
+                Objects.requireNonNull(
+                        SceneManager.class.getResource(fxmlFileName)
+                )
+        );
+
+        Parent root = loader.load();
+
         Scene scene = new Scene(root);
+
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+
+        return loader;
     }
 }
