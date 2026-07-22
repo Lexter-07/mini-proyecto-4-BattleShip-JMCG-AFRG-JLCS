@@ -1,127 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.example.battleship.view.fx.GameButton?>
+<?import com.example.battleship.view.fx.OceanCanvas?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.StartGameController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="680.0" prefWidth="1100.0" stylesheets="@../CSS/theme.css,@../CSS/start-game.css"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.battleship.controller.StartGameController">
    <children>
-      <GridPane fx:id="seaGrid" gridLinesVisible="true" layoutX="270.0" layoutY="90.0" prefHeight="400.0" prefWidth="400.0">
+
+      <!-- Animated ocean fills the whole window; painted first so everything else sits above it. -->
+      <OceanCanvas/>
+
+      <Label layoutX="40.0" layoutY="24.0" styleClass="menu-eyebrow" text="FASE DE DESPLIEGUE"/>
+      <Label layoutX="40.0" layoutY="46.0" styleClass="screen-title" text="Coloca tu flota"/>
+
+      <!-- ================= FLEET TRAY (left panel) ================= -->
+      <Region layoutX="24.0" layoutY="96.0" prefHeight="470.0" prefWidth="235.0" styleClass="glass-panel"
+              mouseTransparent="true"/>
+      <Label layoutX="46.0" layoutY="110.0" styleClass="hud-label" text="TU FLOTA · ARRASTRA PARA UBICAR"/>
+
+      <StackPane fx:id="Aircraft" layoutX="47.0" layoutY="150.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="160.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Destroyer1" layoutX="47.0" layoutY="205.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="80.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Destroyer2" layoutX="140.0" layoutY="205.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="80.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Destroyer3" layoutX="47.0" layoutY="256.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="80.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Submarine1" layoutX="47.0" layoutY="315.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="120.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Submarine2" layoutX="47.0" layoutY="366.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="120.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Frigate1" layoutX="47.0" layoutY="425.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="40.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Frigate2" layoutX="97.0" layoutY="425.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="40.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Frigate3" layoutX="147.0" layoutY="425.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="40.0" styleClass="ship-node"/>
+
+      <StackPane fx:id="Frigate4" layoutX="197.0" layoutY="425.0" onMouseDragged="#onMouseDragged"
+                 onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased"
+                 prefHeight="40.0" prefWidth="40.0" styleClass="ship-node"/>
+
+      <GameButton layoutX="46.0" layoutY="510.0" mnemonicParsing="false" onAction="#onHandleRotate"
+                  prefWidth="191.0" text="⟳  ROTAR"/>
+
+      <!-- ================= BOARD (right side) ================= -->
+      <VBox alignment="CENTER" layoutX="309.0" layoutY="60.0" spacing="6">
+         <children>
+            <Label styleClass="hud-label" text="TU OCÉANO"/>
+         </children>
+      </VBox>
+
+      <HBox layoutX="349.0" layoutY="86.0" spacing="0" prefWidth="400.0">
+         <children>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="1"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="2"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="3"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="4"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="5"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="6"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="7"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="8"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="9"/>
+            <Label alignment="CENTER" prefWidth="40" styleClass="grid-header" text="10"/>
+         </children>
+      </HBox>
+
+      <VBox layoutX="317.0" layoutY="110.0" spacing="0" prefHeight="400.0" alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="A"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="B"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="C"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="D"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="E"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="F"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="G"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="H"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="I"/>
+            <Label alignment="CENTER" prefHeight="40" styleClass="grid-header" text="J"/>
+         </children>
+      </VBox>
+
+      <GridPane fx:id="seaGrid" layoutX="349.0" layoutY="110.0" prefHeight="400.0" prefWidth="400.0"
+                styleClass="board-surface,board-surface-own">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Label layoutX="283.0" layoutY="57.0" text="1    2    3">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="403.0" layoutY="57.0" text="4    5    6">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="247.0" layoutY="94.0" text="A">
-         <font>
-            <Font name="Microsoft New Tai Lue" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="248.0" layoutY="134.0" text="B">
-         <font>
-            <Font name="Microsoft New Tai Lue" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="248.0" layoutY="174.0" text="C">
-         <font>
-            <Font name="Microsoft New Tai Lue" size="24.0" />
-         </font>
-      </Label>
-      <Button fx:id="confirmButton" layoutX="430.0" layoutY="522.0" mnemonicParsing="false" onAction="#onHandleConfirm" text="Confirmar">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="107.0" layoutY="514.0" mnemonicParsing="false" onAction="#onHandleRotate" text="Rotar">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <StackPane fx:id="Aircraft" layoutX="27.0" layoutY="190.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="160.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="160.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Destroyer1" layoutX="28.0" layoutY="239.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="80.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Submarine1" layoutX="29.0" layoutY="342.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="120.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Submarine2" layoutX="29.0" layoutY="441.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="120.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Frigate1" layoutX="29.0" layoutY="391.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="40.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Frigate2" layoutX="79.0" layoutY="391.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="40.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Frigate3" layoutX="130.0" layoutY="391.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="40.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Frigate4" layoutX="179.0" layoutY="391.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="40.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Destroyer3" layoutX="28.0" layoutY="290.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="80.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-         </children>
-      </StackPane>
-      <StackPane fx:id="Destroyer2" layoutX="119.0" layoutY="239.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressedShip" onMouseReleased="#onMouseReleased" prefHeight="40.0" prefWidth="80.0">
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-         </children>
-      </StackPane>
+
+      <GameButton fx:id="confirmButton" disable="true" layoutX="580.0" layoutY="540.0" mnemonicParsing="false"
+                  onAction="#onHandleConfirm" text="CONFIRMAR FLOTA ⚓"/>
+
    </children>
 </AnchorPane>

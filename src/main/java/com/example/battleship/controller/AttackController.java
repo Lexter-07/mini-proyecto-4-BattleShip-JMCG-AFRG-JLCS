@@ -5,9 +5,13 @@ import com.example.battleship.model.GameModel;
 import com.example.battleship.model.SeaMap;
 import com.example.battleship.model.Ship;
 import com.example.battleship.model.enums.AttackResult;
+import com.example.battleship.view.fx.CombatEffects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttackController {
 
@@ -41,8 +45,7 @@ public class AttackController {
                         onEnemyCellPressed(currentRow, currentColumn));
 
                 button.setPrefSize(39, 39);
-                button.setOpacity(0.40);
-                button.setStyle("-fx-background-radius: 0;");
+                CombatEffects.applyBaseStyle(button);
 
                 enemyButtons[row][column] = button;
 
@@ -72,13 +75,17 @@ public class AttackController {
 
     private void paintSunkShip(Ship ship) {
 
+        List<Button> shipCells = new ArrayList<>();
+
         for (Coordinate coordinate : ship.getPositions()) {
             Button button =
                     enemyButtons[coordinate.getRow()]
                             [coordinate.getColumn()];
 
-            button.setStyle("-fx-background-color: gray;" + "-fx-background-radius: 0;");
+            shipCells.add(button);
         }
+
+        CombatEffects.playSunk(shipCells);
     }
 
     private void updateEnemyCell(
@@ -92,11 +99,11 @@ public class AttackController {
 
             case MISS:
                 button.setText("x");
-                button.setStyle("-fx-background-color: #0ae4fc; -fx-background-radius: 0;");
+                CombatEffects.playMiss(button);
                 break;
 
             case HIT:
-                button.setStyle(" -fx-background-color: red; -fx-background-radius: 0; ");
+                CombatEffects.playHit(button);
                 break;
 
             case SUNK:

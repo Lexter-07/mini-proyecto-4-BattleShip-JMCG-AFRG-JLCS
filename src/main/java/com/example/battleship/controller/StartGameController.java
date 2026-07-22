@@ -179,6 +179,7 @@ public class StartGameController {
         }
 
         snapShip(coordinate);
+        selectedShipView.playSnapEffect();
 
         enableConfirmButton();
 
@@ -211,8 +212,7 @@ public class StartGameController {
         System.out.println(pane.getBoundsInLocal());
         System.out.println(pane.getBoundsInParent());
 
-        pane.setLayoutX(point.getX());
-        pane.setLayoutY(point.getY());
+        selectedShipView.animateMoveTo(point.getX(), point.getY());
 
     }
 
@@ -240,7 +240,6 @@ public class StartGameController {
 
     private void returnToOrigin() {
 
-        StackPane pane = selectedShipView.getView();
         Point2D origin = selectedShipView.getOriginalPosition();
 
         gameModel.unplaceShip(selectedShipView.getShip());
@@ -252,8 +251,7 @@ public class StartGameController {
 
         selectedShipView.rotate();
 
-        pane.setLayoutX(origin.getX());
-        pane.setLayoutY(origin.getY());
+        selectedShipView.animateMoveTo(origin.getX(), origin.getY());
     }
 
     private boolean isInsideGrid(MouseEvent event) {
