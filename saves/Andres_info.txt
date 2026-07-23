@@ -1,4 +1,0 @@
-Nickname: Andres
-Human Sunk Ships: 5
-Machine Sunk Ships: 3
-Human Turn: true

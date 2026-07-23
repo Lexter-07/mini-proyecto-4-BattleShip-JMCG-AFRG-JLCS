@@ -4,8 +4,8 @@ import com.example.battleship.model.Coordinate;
 import com.example.battleship.model.GameModel;
 import com.example.battleship.model.SeaMap;
 import com.example.battleship.model.Ship;
+import com.example.battleship.model.Shot;
 import com.example.battleship.model.enums.AttackResult;
-import com.example.battleship.model.threads.AutoSaveThread;
 import com.example.battleship.model.threads.IAThread;
 import com.example.battleship.model.threads.TurnThread;
 import com.example.battleship.view.fx.CombatEffects;
@@ -26,10 +26,9 @@ public class AttackController {
 
     private GameModel gameModel;
 
-    // Hilos de ejecución
+    // ELIMINADO: AutoSaveThread
     private IAThread iaThread;
     private TurnThread turnThread;
-    private AutoSaveThread autoSaveThread;
 
     @FXML
     public void initialize() {
@@ -41,26 +40,45 @@ public class AttackController {
         this.gameModel = gameModel;
 
         drawPlayerShips();
+        restoreBoardState(); // NUEVO: Recupera el estado visual de la partida
         initializeThreads();
         updateBoardInteractivity();
     }
 
     // ==========================================
+    // Sincronización de Partidas Guardadas
+    // ==========================================
+    private void restoreBoardState() {
+        // Restaurar los disparos que el Humano le hizo a la Máquina
+        for (Shot shot : gameModel.getMachinePlayer().getSeaMap().getShots()) {
+            Coordinate coord = shot.getCoordinate();
+            Button btn = enemyButtons[coord.getRow()][coord.getColumn()];
+            updateCellVisuals(btn, shot.getResult());
+
+            if (shot.getResult() == AttackResult.SUNK) {
+                paintSunkShip(gameModel.getMachineShipAt(coord), enemyButtons);
+            }
+        }
+
+        // Restaurar los disparos que la Máquina le hizo al Humano
+        for (Shot shot : gameModel.getHumanPlayer().getSeaMap().getShots()) {
+            Coordinate coord = shot.getCoordinate();
+            Button btn = playerButtons[coord.getRow()][coord.getColumn()];
+            updateCellVisuals(btn, shot.getResult());
+        }
+    }
+
+    // ==========================================
     // Inicialización y Gestión de Hilos
     // ==========================================
-
     private void initializeThreads() {
-        // Hilo de Auto-guardado
-        autoSaveThread = new AutoSaveThread(gameModel);
-        autoSaveThread.start();
-
-        // Hilo de control de Turnos
         turnThread = new TurnThread(gameModel);
+        turnThread.setDaemon(true); // ¡CRUCIAL! Permite que el programa se cierre al darle a la X
         turnThread.setOnTurnChange(this::updateBoardInteractivity);
         turnThread.start();
 
-        // Hilo de Inteligencia Artificial
         iaThread = new IAThread(gameModel);
+        iaThread.setDaemon(true); // ¡CRUCIAL!
         iaThread.setOnUIAttackUpdate(this::onMachineAttackComplete);
         iaThread.start();
     }
@@ -68,11 +86,9 @@ public class AttackController {
     private void stopThreads() {
         if (iaThread != null) iaThread.stopThread();
         if (turnThread != null) turnThread.stopThread();
-        if (autoSaveThread != null) autoSaveThread.stopThread();
     }
 
     private void updateBoardInteractivity() {
-        // Bloquea el tablero enemigo si no es tu turno o el juego terminó
         boolean isInteractive = gameModel.isHumanTurn() && !gameModel.isGameFinished();
         enemyGrid.setDisable(!isInteractive);
     }
@@ -80,7 +96,6 @@ public class AttackController {
     // ==========================================
     // Creación visual de los tableros
     // ==========================================
-
     private void createEnemyGrid() {
         for (int row = 0; row < SeaMap.ROWS; row++) {
             for (int column = 0; column < SeaMap.COLUMNS; column++) {
@@ -102,7 +117,6 @@ public class AttackController {
         for (int row = 0; row < SeaMap.ROWS; row++) {
             for (int column = 0; column < SeaMap.COLUMNS; column++) {
                 Button button = new Button();
-                // El tablero del jugador es solo de visualización (sin setOnAction)
                 button.setPrefSize(39, 39);
                 button.setStyle("-fx-background-color: rgba(30, 144, 255, 0.3); -fx-border-color: #33b5e5; -fx-border-width: 0.5;");
 
@@ -113,26 +127,25 @@ public class AttackController {
     }
 
     private void drawPlayerShips() {
-        // Recuperamos la lista de barcos del jugador humano y los pintamos
         List<Ship> humanShips = gameModel.getHumanPlayer().getSeaMap().getShips();
         for (Ship ship : humanShips) {
             for (Coordinate coord : ship.getPositions()) {
                 Button btn = playerButtons[coord.getRow()][coord.getColumn()];
-                // Color para identificar visualmente dónde están tus barcos
                 btn.setStyle("-fx-background-color: #7f8fa6; -fx-border-color: #2f3640; -fx-border-width: 1;");
             }
         }
     }
 
     // ==========================================
-    // Lógica de Ataques (Humano y Máquina)
+    // Lógica de Ataques y Guardado
     // ==========================================
-
     private void onEnemyCellPressed(int row, int column) {
         if (gameModel.isGameFinished() || !gameModel.isHumanTurn()) return;
 
         Coordinate coordinate = new Coordinate(row, column);
         AttackResult result = gameModel.humanAttack(coordinate);
+
+        if (result == AttackResult.ALREADY_ATTACKED) return;
 
         updateCellVisuals(enemyButtons[row][column], result);
 
@@ -140,7 +153,8 @@ public class AttackController {
             paintSunkShip(gameModel.getMachineShipAt(coordinate), enemyButtons);
         }
 
-        autoSaveThread.requestSave(); // Solicitamos un guardado en segundo plano
+        // NUEVO: Guardado directo, instantáneo y seguro
+        gameModel.saveGame();
         checkIfGameEnded();
     }
 
@@ -150,10 +164,8 @@ public class AttackController {
 
         updateCellVisuals(playerButtons[r][c], result);
 
-        // Si la máquina nos hundió un barco, lo identificamos y lo pintamos (asumiendo que tienes un getter similar para el humano, si no, bastará con el updateCellVisuals)
-        // Nota: Si necesitas el efecto completo de "SUNK" para el jugador, se implementa igual que el del enemigo.
-
-        autoSaveThread.requestSave();
+        // NUEVO: Guardado directo tras el turno de la IA
+        gameModel.saveGame();
         checkIfGameEnded();
     }
 
@@ -165,7 +177,7 @@ public class AttackController {
                 CombatEffects.playMiss(button);
                 break;
             case HIT:
-            case SUNK: // Los impactos visuales iniciales son los mismos
+            case SUNK:
                 button.setStyle("-fx-background-color: #e84118;");
                 CombatEffects.playHit(button);
                 break;
@@ -180,19 +192,15 @@ public class AttackController {
         List<Button> shipCells = new ArrayList<>();
         for (Coordinate coordinate : ship.getPositions()) {
             Button button = gridButtons[coordinate.getRow()][coordinate.getColumn()];
-            button.setStyle("-fx-background-color: #c23616;"); // Rojo más oscuro
+            button.setStyle("-fx-background-color: #c23616;");
             shipCells.add(button);
         }
         CombatEffects.playSunk(shipCells);
     }
 
-    // ==========================================
-    // Fin de Partida
-    // ==========================================
-
     private void checkIfGameEnded() {
         if (gameModel.hasWinner()) {
-            stopThreads(); // ¡Crucial detener los hilos antes de salir de la escena!
+            stopThreads();
             gameModel.finishGame();
 
             javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);

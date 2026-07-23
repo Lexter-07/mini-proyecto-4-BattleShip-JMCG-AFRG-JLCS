@@ -71,16 +71,18 @@ public class IAThread extends Thread {
                 // LÓGICA DE SELECCIÓN DE DISPARO
                 // ==========================================
                 Coordinate shot;
-
-                // Si hay objetivos prioritarios, atacamos ahí primero
                 if (!huntingTargets.isEmpty()) {
                     shot = huntingTargets.pop();
                 } else {
-                    // Si no, volvemos a buscar aleatoriamente
                     shot = availableShots.remove(0);
                 }
 
                 AttackResult result = gameModel.machineAttack(shot);
+
+                // ¡ESTA ES LA LÍNEA QUE EVITA QUE SE TRABE!
+                if (result == AttackResult.ALREADY_ATTACKED) {
+                    continue;
+                }
 
                 // ==========================================
                 // EVALUACIÓN POST-DISPARO
