@@ -17,7 +17,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         new SceneManager(primaryStage);
 
-        SceneManager.changeScene(Path.menuView);
+        // Cambiamos menuView por loginView para iniciar directamente en el Login
+        SceneManager.changeScene(Path.loginView);
         primaryStage.setTitle("BattleShip");
     }
 }

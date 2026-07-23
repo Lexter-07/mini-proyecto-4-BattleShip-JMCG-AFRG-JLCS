@@ -4,17 +4,18 @@
 <?import com.example.battleship.view.fx.OceanCanvas?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="650.0" prefWidth="900.0" stylesheets="@../CSS/theme.css,@../CSS/menu.css"
+<StackPane prefHeight="650.0" prefWidth="900.0" stylesheets="@../CSS/theme.css,@../CSS/login.css"
            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.example.battleship.controller.MenuController">
+           fx:controller="com.example.battleship.controller.LoginController">
     <children>
 
-        <!-- Animated ocean, fog and fills the whole window behind everything else. -->
+        <!-- Fondo del océano animado -->
         <OceanCanvas/>
 
         <BorderPane pickOnBounds="false">
@@ -24,28 +25,27 @@
                     <padding>
                         <Insets top="46"/>
                     </padding>
-                    <Label styleClass="menu-eyebrow" text="COMANDO NAVAL"/>
-                    <Label styleClass="title" text="⚓ BATALLA NAVAL"/>
-                    <Label styleClass="subtitle" text="Domina los océanos"/>
+                    <Label styleClass="menu-eyebrow" text="BATTLESHIP"/>
+                    <Label styleClass="title" text="INGRESO DE COMANDANTE"/>
                 </VBox>
             </top>
 
             <center>
                 <StackPane>
-                    <VBox alignment="CENTER" maxHeight="320.0" maxWidth="360" minHeight="220.0"
-                          prefWidth="360.0" spacing="18" styleClass="glass-panel-strong">
+                    <VBox alignment="CENTER" maxHeight="280.0" maxWidth="400.0" spacing="25" styleClass="glass-panel-strong">
                         <padding>
                             <Insets bottom="34" left="34" right="34" top="34"/>
                         </padding>
 
-                        <GameButton fx:id="newGameButton" maxWidth="Infinity" onAction="#onHandleNewGame"
-                                    text="NUEVA PARTIDA"/>
+                        <Label styleClass="subtitle" text="Identifícate para comandar tu flota"/>
 
-                        <GameButton fx:id="continueButton" maxWidth="Infinity" onAction="#onHandleContinue"
-                                    text="CONTINUAR"/>
+                        <VBox alignment="CENTER" spacing="10">
+                            <Label styleClass="input-label" text="NOMBRE DEL COMANDANTE" />
+                            <TextField fx:id="nicknameField" alignment="CENTER" promptText="Ej. Almirante Nelson" styleClass="custom-text-field" />
+                        </VBox>
 
-                        <GameButton fx:id="exitButton" maxWidth="Infinity" onAction="#onHandleExit"
-                                    styleClass="danger-button" text="SALIR"/>
+                        <!-- Único botón apuntando al método correcto -->
+                        <GameButton fx:id="enterButton" maxWidth="Infinity" onAction="#onHandleEnter" text="INGRESAR AL MENÚ"/>
                     </VBox>
                 </StackPane>
             </center>
@@ -55,9 +55,9 @@
                     <padding>
                         <Insets bottom="20"/>
                     </padding>
-                    <Label styleClass="hud-label" text="Universidad del Valle"/>
+                    <Label styleClass="hud-label" text="Comando Naval"/>
                     <Label styleClass="hud-label" text="•"/>
-                    <Label styleClass="hud-label" text="POE 2026-II"/>
+                    <Label styleClass="hud-label" text="Preparación de Flota"/>
                 </HBox>
             </bottom>
 

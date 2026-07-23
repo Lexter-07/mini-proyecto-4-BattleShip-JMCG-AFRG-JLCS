@@ -36,12 +36,16 @@ public class ShipView {
     private final Ship ship;
 
     private Point2D originalPosition;
+    private Orientation displayedOrientation;
 
     public ShipView(StackPane view, Ship ship) {
         this.view = view;
         this.ship = ship;
 
         view.setPickOnBounds(true);
+
+        displayedOrientation = ship.getOrientation();
+
         rebuildHull();
     }
 
@@ -57,6 +61,10 @@ public class ShipView {
         return originalPosition;
     }
 
+    public Orientation getDisplayedOrientation() {
+        return displayedOrientation;
+    }
+
     public void setOriginalPosition(Point2D originalPosition) {
         this.originalPosition = originalPosition;
     }
@@ -66,6 +74,8 @@ public class ShipView {
      * "turn" flourish (squash + fade) instead of an instant size swap.
      */
     public void rotate() {
+        displayedOrientation = ship.getOrientation();
+
         ScaleTransition squash = new ScaleTransition(Duration.millis(90), view);
         squash.setToX(0.15);
         squash.setOnFinished(e -> {
@@ -129,8 +139,16 @@ public class ShipView {
 
         Group hull = horizontal ? buildHorizontalHull(length, width) : buildVerticalHull(width, length);
 
+        hull.setOnMousePressed(e ->
+                System.out.println("PRESSED GROUP"));
+
         DropShadow shadow = UIEffects.softShadow();
         view.setEffect(shadow);
+
+
+        hull.setMouseTransparent(true);
+
+
 
         view.getChildren().setAll(hull);
     }

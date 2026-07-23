@@ -6,6 +6,8 @@ import com.example.battleship.model.enums.PlacementResult;
 import com.example.battleship.model.enums.ShipType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -30,10 +32,10 @@ public class GameModel implements Serializable {
      * @param nickname Nombre del jugador.
      */
     public void newGame(String nickname) {
-
         gameStatus = new GameStatus(nickname);
-        createMachineFleet();
 
+        FleetGenerator.generate(
+                gameStatus.getMachinePlayer().getSeaMap(), FleetGenerator.createFleet());
     }
 
     // ===========================
@@ -68,32 +70,56 @@ public class GameModel implements Serializable {
     // Gestión de partida
     // ===========================
 
-    /**
-     * Reinicia la partida actual.
-     */
     public void reset() {
         if (gameStatus != null) gameStatus.reset();
     }
 
-    /**
-     * Start the game.
-     */
     public void startGame() {
         gameStatus.setGameStarted(true);
     }
 
     /**
-     * Ends Game.
+     * Ends Game and immediately cleans up the save file.
      */
     public void finishGame() {
         gameStatus.setGameFinished(true);
+        // NUEVO: Borrar la partida guardada apenas se declara que el juego terminó
+        if (gameStatus.getHumanPlayer() != null) {
+            PersistenceManager.deleteSave(gameStatus.getHumanPlayer().getNickname());
+        }
     }
 
+    // ... (El resto del código de barcos y ataques se queda igual) ...
 
-    // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+    // ===========================
+    // SAVE THE GAME
+    // ===========================
 
+    public void saveGame() {
+        if (gameStatus != null && gameStatus.getHumanPlayer() != null) {
+            // NUEVO: Si el juego ya terminó, no lo guardamos. Lo eliminamos por seguridad.
+            if (gameStatus.isGameFinished()) {
+                PersistenceManager.deleteSave(gameStatus.getHumanPlayer().getNickname());
+            } else {
+                String nickname = gameStatus.getHumanPlayer().getNickname();
+                PersistenceManager.saveGame(this.gameStatus, nickname);
+            }
+        }
+    }
 
+    public void loadGame(String nickname) {
+        GameStatus loadedStatus = PersistenceManager.loadGame(nickname);
+        if (loadedStatus != null) {
+            this.gameStatus = loadedStatus;
+        }
+    }
+
+    public void setGameStatus(GameStatus status) {
+        this.gameStatus = status;
+    }
+    // ===========================
     // Management of ships
+    // ===========================
 
     /**
      * Coloca o mueve un barco del jugador humano.
@@ -108,11 +134,20 @@ public class GameModel implements Serializable {
                 .placeShip(ship, start, orientation);
     }
 
+
+    /**
+     * Coloca automáticamente la flota del jugador humano.
+     */
+    public void autoPlaceHumanFleet(List<Ship> ships) {
+        FleetGenerator.generate(
+                gameStatus.getHumanPlayer().getSeaMap(),
+                ships);
+    }
+
     /**
      * Retira un barco del tablero.
      */
     public void unplaceShip(Ship ship) {
-
         gameStatus.getHumanPlayer()
                 .getSeaMap()
                 .unplaceShip(ship);
@@ -144,8 +179,6 @@ public class GameModel implements Serializable {
 
     /**
      * La Maquina shoots aleatoariamente to Player Board.
-     * aca se puede implementar o reemplazar despues con una clase IA o algo asi
-     * if the machine fails, eseasl turn pasa al humano.
      */
     public AttackResult machineAttack(Coordinate coordinate) {
         AttackResult result = gameStatus
@@ -169,85 +202,33 @@ public class GameModel implements Serializable {
     }
 
 
-
     // ===========================
+    // Validations & Setup
     // ===========================
 
     /**
      * Verifica si el jugador humano ya colocó todos sus barcos.
      */
     public boolean humanReady() {
-
         return gameStatus.getHumanPlayer()
                 .getSeaMap()
                 .getShips()
                 .size() == 10;
-
-    }
-
-    private void createMachineFleet() {
-
-        placeMachineShip(ShipType.AIRCRAFT);
-
-        placeMachineShip(ShipType.SUBMARINE);
-        placeMachineShip(ShipType.SUBMARINE);
-
-        placeMachineShip(ShipType.DESTROYER);
-        placeMachineShip(ShipType.DESTROYER);
-        placeMachineShip(ShipType.DESTROYER);
-
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-        placeMachineShip(ShipType.FRIGATE);
-
     }
 
 
-    private void placeMachineShip(ShipType type) {
 
-        Ship ship = new Ship(type);
-        PlacementResult result;
-
-        do {
-
-            int row = random.nextInt(SeaMap.ROWS);
-            int column = random.nextInt(SeaMap.COLUMNS);
-
-            Orientation orientation;
-
-            if (random.nextBoolean()) {
-                orientation = Orientation.HORIZONTAL;
-            } else {
-                orientation = Orientation.VERTICAL;
-            }
-
-            result = gameStatus
-                    .getMachinePlayer()
-                    .getSeaMap()
-                    .placeShip(
-                            ship,
-                            new Coordinate(row, column),
-                            orientation
-                    );
-
-        } while (result != PlacementResult.SUCCESS);
-
-    }
 
 
     /**
      * Validate if machine ya colocó todos sus barcos.
      */
     public boolean machineReady() {
-
         return gameStatus.getMachinePlayer()
                 .getSeaMap()
                 .getShips()
                 .size() == 10;
-
     }
-
 
     public Ship getMachineShipAt(Coordinate coordinate) {
         return gameStatus
@@ -256,7 +237,6 @@ public class GameModel implements Serializable {
                 .getShipAt(coordinate);
     }
 
-
     /**
      * Validates if the game, can start.
      */
@@ -264,25 +244,18 @@ public class GameModel implements Serializable {
         return humanReady() && machineReady();
     }
 
-
     /**
      * Comprueba si existe un ganador.
      *
      * @return El jugador ganador o null si la partida continúa.
      */
     public Player checkWinner() {
-        if (gameStatus.getMachinePlayer()
-                .getSeaMap()
-                .allShipsSunk()) {
-
+        if (gameStatus.getMachinePlayer().getSeaMap().allShipsSunk()) {
             finishGame();
             return gameStatus.getHumanPlayer();
         }
 
-        if (gameStatus.getHumanPlayer()
-                .getSeaMap()
-                .allShipsSunk()) {
-
+        if (gameStatus.getHumanPlayer().getSeaMap().allShipsSunk()) {
             finishGame();
             return gameStatus.getMachinePlayer();
         }
@@ -293,30 +266,10 @@ public class GameModel implements Serializable {
      * Indica si la partida terminó.
      */
     public boolean hasWinner() {
-
         return checkWinner() != null;
-
     }
 
 
-
-    // ===========================
-        // SAVE THE GAME
-    // ===========================
-
-    /**
-     * Guardar la partidq.
-     */
-    public void saveGame() {
-        // Se implementa despues con una clase savegame
-    }
-
-    /**
-     * Cargar la partida.
-     */
-    public void loadGame() {
-        // Se implementa despues con una clase Savegame.
-    }
 
 
 }

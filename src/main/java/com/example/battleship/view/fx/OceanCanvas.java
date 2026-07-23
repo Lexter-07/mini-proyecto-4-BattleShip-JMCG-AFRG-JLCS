@@ -106,13 +106,13 @@ public class OceanCanvas extends Canvas {
 
         LinearGradient sky = darkVariant
                 ? new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                    new Stop(0, Color.web("#04070d")),
-                    new Stop(.55, Color.web("#0a1826")),
-                    new Stop(1, Color.web("#050b12")))
+                new Stop(0, Color.web("#04070d")),
+                new Stop(.55, Color.web("#0a1826")),
+                new Stop(1, Color.web("#050b12")))
                 : new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                    new Stop(0, Color.web("#041525")),
-                    new Stop(.45, Color.web("#0a3b60")),
-                    new Stop(1, Color.web("#07233d")));
+                new Stop(0, Color.web("#041525")),
+                new Stop(.45, Color.web("#0a3b60")),
+                new Stop(1, Color.web("#07233d")));
 
         gc.setFill(sky);
         gc.fillRect(0, 0, w, h);
