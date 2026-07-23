@@ -1,0 +1,93 @@
+/* =========================================
+   Estilos específicos de la pantalla de Login
+   ========================================= */
+
+/* Panel central de cristal ahumado */
+.glass-panel-strong {
+    -fx-background-color: rgba(15, 25, 40, 0.75);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(60, 120, 180, 0.4);
+    -fx-border-radius: 12;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 20, 0.2, 0, 8);
+}
+
+/* Títulos y Subtítulos */
+.menu-eyebrow {
+    -fx-text-fill: #3cd070;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-letter-spacing: 2px;
+}
+
+.title {
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+    -fx-effect: dropshadow(gaussian, rgba(33, 216, 255, 0.6), 15, 0.3, 0, 0);
+}
+
+.subtitle {
+    -fx-text-fill: #a0b8d0;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 15px;
+}
+
+/* Campo de entrada de texto (Nickname) */
+.input-label {
+    -fx-text-fill: #5fd8ff;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.custom-text-field {
+    -fx-background-color: rgba(10, 15, 25, 0.8);
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #50657a;
+    -fx-border-color: rgba(60, 120, 180, 0.5);
+    -fx-border-width: 0 0 2 0; /* Solo borde inferior */
+    -fx-padding: 10 15;
+    -fx-font-size: 16px;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.custom-text-field:focused {
+    -fx-border-color: #33b5e5;
+    -fx-background-color: rgba(15, 25, 45, 0.95);
+}
+
+/* Botón interactivo */
+.game-button {
+    -fx-background-color: linear-gradient(to bottom, #1b87c7, #0e5b8c);
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 25;
+    -fx-background-radius: 6;
+    -fx-border-color: #4db8ff;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.game-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #269aeb, #1470ad);
+    -fx-effect: dropshadow(gaussian, rgba(77, 184, 255, 0.6), 10, 0.4, 0, 0);
+}
+
+.game-button:pressed {
+    -fx-background-color: #0b4163;
+    -fx-border-color: #1b87c7;
+}
+
+/* Textos de pie de página (Footer) */
+.hud-label {
+    -fx-text-fill: #55728a;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 11px;
+}

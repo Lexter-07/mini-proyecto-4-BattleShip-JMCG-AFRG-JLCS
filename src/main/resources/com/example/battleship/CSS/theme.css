@@ -1,0 +1,163 @@
+/* ===========================================================
+   THEME.CSS
+   BattleShip - Naval Command UI Kit
+   Design tokens + reusable classes shared by every screen.
+   Import this FIRST in every FXML: @theme.css then the
+   screen-specific stylesheet.
+   =========================================================== */
+
+.root {
+    /* ---- Palette (naval / cinematic) ---- */
+    -naval-abyss:        #030B14;
+    -naval-deep:         #071C30;
+    -naval-steel:        #0F2C4B;
+    -naval-steel-light:  #1A6FA8;
+    -naval-accent:       #21D8FF;
+    -naval-accent-dim:   #0AA8D0;
+    -naval-gold:         #E8B84B;
+    -naval-hit:          #FF4B3E;
+    -naval-fire:         #FF8A2B;
+    -naval-miss:         #21D8FF;
+    -naval-sunk:         #5A6B7A;
+    -naval-hull:         #C9772F;
+    -naval-hull-dark:    #7A4A1E;
+    -naval-text:         #EAF4FF;
+    -naval-text-dim:     #8FAEC7;
+
+    -fx-font-family: "Rajdhani", "Segoe UI Semibold", "Segoe UI", sans-serif;
+    -fx-background-color: -naval-abyss;
+}
+
+/* ---- Typography helpers ---- */
+.hud-title {
+    -fx-font-family: "Orbitron", "Eurostile", "Segoe UI", sans-serif;
+    -fx-font-weight: bold;
+    -fx-text-fill: -naval-text;
+}
+
+.hud-label {
+    -fx-font-family: "Rajdhani", "Segoe UI", sans-serif;
+    -fx-text-fill: -naval-text-dim;
+    -fx-font-size: 13px;
+    -fx-letter-spacing: 1.5px;
+}
+
+/* ---- Glassmorphism panel, reused everywhere ---- */
+.glass-panel {
+    -fx-background-color:
+            linear-gradient(to bottom, rgba(20,45,70,.55), rgba(6,18,32,.65));
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-width: 1.2;
+    -fx-border-color: rgba(120,200,255,.25);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,.55), 30, .35, 0, 14);
+}
+
+.glass-panel-strong {
+    -fx-background-color:
+            linear-gradient(to bottom, rgba(10,30,50,.78), rgba(4,12,22,.85));
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-border-color: rgba(120,200,255,.30);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,.6), 22, .3, 0, 8);
+}
+
+/* ---- Generic game button (used by GameButton custom control) ---- */
+.game-button {
+    -fx-background-color: linear-gradient(to bottom, -naval-steel-light, -naval-steel);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-border-color: rgba(120,220,255,.55);
+    -fx-text-fill: -naval-text;
+    -fx-font-family: "Orbitron", "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+    -fx-cursor: hand;
+    -fx-padding: 12 26 12 26;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,.45), 10, .2, 0, 4);
+}
+
+.game-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #2A9FE6, -naval-steel-light);
+    -fx-effect: dropshadow(gaussian, -naval-accent, 22, .55, 0, 0);
+}
+
+.game-button:armed, .game-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, -naval-steel, #08243c);
+}
+
+.danger-button {
+    -fx-background-color: linear-gradient(to bottom, #C63D3D, #7E2222);
+    -fx-border-color: rgba(255,150,150,.55);
+}
+.danger-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #E85D5D, #9E2A2A);
+    -fx-effect: dropshadow(gaussian, rgba(255,90,90,.65), 22, .5, 0, 0);
+}
+
+/* ---- Board tile texture (checker + bevel), applied to GridPane backgrounds ---- */
+.board-surface {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+}
+
+.board-surface-own {
+    -fx-background-color:
+            linear-gradient(to bottom right, rgba(20,70,110,.35), rgba(8,30,50,.55)),
+            repeating-linear-gradient(from 0px 0px to 40px 40px, rgba(255,255,255,.035) 0px 1px, transparent 1px 40px),
+            repeating-linear-gradient(from 0px 0px to 40px 0px, rgba(255,255,255,.035) 0px 1px, transparent 1px 40px);
+    -fx-border-color: -naval-accent-dim;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,.5), 18, .3, 0, 4);
+}
+
+.board-surface-enemy {
+    -fx-background-color:
+            linear-gradient(to bottom right, rgba(50,10,20,.30), rgba(10,4,10,.65)),
+            repeating-linear-gradient(from 0px 0px to 40px 40px, rgba(255,255,255,.03) 0px 1px, transparent 1px 40px),
+            repeating-linear-gradient(from 0px 0px to 40px 0px, rgba(255,255,255,.03) 0px 1px, transparent 1px 40px);
+    -fx-border-color: rgba(255,90,90,.35);
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,.6), 18, .3, 0, 4);
+}
+
+/* ---- Enemy grid attack cells (Buttons created in AttackController) ---- */
+.cell-water {
+    -fx-background-color: linear-gradient(to bottom, rgba(30,90,130,.35), rgba(10,35,55,.45));
+    -fx-background-radius: 0;
+    -fx-border-color: rgba(150,220,255,.12);
+    -fx-border-width: 0.5;
+    -fx-cursor: hand;
+}
+.cell-water:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(60,150,200,.55), rgba(20,60,90,.6));
+    -fx-effect: dropshadow(gaussian, -naval-accent, 12, .5, 0, 0);
+}
+.cell-miss {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(33,216,255,.55), rgba(10,35,55,.55));
+    -fx-text-fill: -naval-accent;
+    -fx-font-weight: bold;
+}
+.cell-hit {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 75%, -naval-fire, -naval-hit 70%);
+    -fx-effect: dropshadow(gaussian, -naval-fire, 16, .6, 0, 0);
+}
+.cell-sunk {
+    -fx-background-color: linear-gradient(to bottom, -naval-sunk, #2E3A44);
+    -fx-opacity: 0.9;
+}
+
+/* ---- Scrollbars / tooltips (kept consistent) ---- */
+.scroll-bar { -fx-background-color: transparent; }
+.scroll-bar .thumb { -fx-background-radius: 20; -fx-background-color: -naval-accent-dim; }
+
+.tooltip {
+    -fx-font-size: 13;
+    -fx-background-radius: 8;
+    -fx-background-color: -naval-steel;
+    -fx-text-fill: -naval-text;
+    -fx-border-color: rgba(120,200,255,.3);
+    -fx-border-radius: 8;
+}

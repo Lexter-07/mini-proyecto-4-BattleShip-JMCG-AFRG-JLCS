@@ -70,28 +70,53 @@ public class GameModel implements Serializable {
     // Gestión de partida
     // ===========================
 
-    /**
-     * Reinicia la partida actual.
-     */
     public void reset() {
         if (gameStatus != null) gameStatus.reset();
     }
 
-    /**
-     * Start the game.
-     */
     public void startGame() {
         gameStatus.setGameStarted(true);
     }
 
     /**
-     * Ends Game.
+     * Ends Game and immediately cleans up the save file.
      */
     public void finishGame() {
         gameStatus.setGameFinished(true);
+        // NUEVO: Borrar la partida guardada apenas se declara que el juego terminó
+        if (gameStatus.getHumanPlayer() != null) {
+            PersistenceManager.deleteSave(gameStatus.getHumanPlayer().getNickname());
+        }
     }
 
+    // ... (El resto del código de barcos y ataques se queda igual) ...
 
+    // ===========================
+    // SAVE THE GAME
+    // ===========================
+
+    public void saveGame() {
+        if (gameStatus != null && gameStatus.getHumanPlayer() != null) {
+            // NUEVO: Si el juego ya terminó, no lo guardamos. Lo eliminamos por seguridad.
+            if (gameStatus.isGameFinished()) {
+                PersistenceManager.deleteSave(gameStatus.getHumanPlayer().getNickname());
+            } else {
+                String nickname = gameStatus.getHumanPlayer().getNickname();
+                PersistenceManager.saveGame(this.gameStatus, nickname);
+            }
+        }
+    }
+
+    public void loadGame(String nickname) {
+        GameStatus loadedStatus = PersistenceManager.loadGame(nickname);
+        if (loadedStatus != null) {
+            this.gameStatus = loadedStatus;
+        }
+    }
+
+    public void setGameStatus(GameStatus status) {
+        this.gameStatus = status;
+    }
     // ===========================
     // Management of ships
     // ===========================
@@ -192,11 +217,6 @@ public class GameModel implements Serializable {
     }
 
 
-    // h
-    // h
-    // h
-    // h
-
 
 
 
@@ -249,38 +269,7 @@ public class GameModel implements Serializable {
         return checkWinner() != null;
     }
 
-    // ===========================
-    // SAVE THE GAME
-    // ===========================
 
-    /**
-     * Saves the current game state to the disk using the player's nickname.
-     */
-    public void saveGame() {
-        if (gameStatus != null && gameStatus.getHumanPlayer() != null) {
-            String nickname = gameStatus.getHumanPlayer().getNickname();
-            PersistenceManager.saveGame(this.gameStatus, nickname);
-        }
-    }
 
-    /**
-     * Loads a game state from the disk for a given nickname.
-     *
-     * @param nickname The identifier of the player.
-     */
-    public void loadGame(String nickname) {
-        GameStatus loadedStatus = PersistenceManager.loadGame(nickname);
-        if (loadedStatus != null) {
-            this.gameStatus = loadedStatus;
-        }
-    }
 
-    /**
-     * Injects an already loaded GameStatus directly.
-     *
-     * @param status The restored GameStatus.
-     */
-    public void setGameStatus(GameStatus status) {
-        this.gameStatus = status;
-    }
 }

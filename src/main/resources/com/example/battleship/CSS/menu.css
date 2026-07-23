@@ -1,30 +1,39 @@
 /* ===========================================================
    MENU.CSS
-   BattleShip - JavaFX
-   Universidad del Valle
+   Screen-specific rules for the main menu.
+   Requires theme.css to be imported first (see menu.fxml).
    =========================================================== */
 
-/**************************************************************
- * ROOT
- **************************************************************/
-
-.root {
-
-    -fx-font-family: "Segoe UI";
-
-    -fx-background-color:
-            linear-gradient(
-                    to bottom,
-                    #041525 0%,
-                    #07233d 20%,
-                    #0a3b60 55%,
-                    #0f4f7d 80%,
-                    #07233d 100%
-            );
-
+.menu-eyebrow {
+    -fx-font-family: "Rajdhani", "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-letter-spacing: 4px;
+    -fx-text-fill: -naval-accent;
+    -fx-font-weight: bold;
 }
 
+.title {
+    -fx-font-family: "Orbitron", "Eurostile", "Segoe UI", sans-serif;
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -naval-text;
+    -fx-effect: dropshadow(gaussian, rgba(33,216,255,.55), 34, .45, 0, 0);
+}
 
+.subtitle {
+    -fx-font-size: 17px;
+    -fx-text-fill: -naval-text-dim;
+    -fx-font-style: italic;
+    -fx-letter-spacing: 1px;
+}
+
+.menu-footer {
+    -fx-background-color: rgba(2, 8, 16, .35);
+}
+
+.menu-footer .label {
+    -fx-text-fill: -naval-text-dim;
+}
 /**************************************************************
  * TITLE
  **************************************************************/

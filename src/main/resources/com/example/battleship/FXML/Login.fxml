@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.example.battleship.view.fx.GameButton?>
+<?import com.example.battleship.view.fx.OceanCanvas?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="25.0" style="-fx-background-color: #1e272e;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.LoginController">
-    <padding>
-        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-    </padding>
+<StackPane prefHeight="650.0" prefWidth="900.0" stylesheets="@../CSS/theme.css,@../CSS/login.css"
+           xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.battleship.controller.LoginController">
+    <children>
 
-    <!-- Title -->
-    <Label text="BATTLESHIP" textFill="#0ae4fc">
-        <font>
-            <Font name="System Bold" size="48.0" />
-        </font>
-    </Label>
+        <!-- Fondo del océano animado -->
+        <OceanCanvas/>
 
-    <Label text="Enter your nickname to command your fleet" textFill="#d2dae2">
-        <font>
-            <Font size="16.0" />
-        </font>
-    </Label>
+        <BorderPane pickOnBounds="false">
 
-    <!-- Input Area -->
-    <VBox alignment="CENTER" maxWidth="300.0" spacing="10.0" style="-fx-background-color: #485460; -fx-background-radius: 5;">
-        <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-        </padding>
-        <Label text="COMMANDER NAME" textFill="WHITE">
-            <font>
-                <Font name="System Bold" size="12.0" />
-            </font>
-        </Label>
-        <TextField fx:id="nicknameField" alignment="CENTER" promptText="e.g. Admiral Nelson" style="-fx-background-color: #d2dae2; -fx-background-radius: 3; -fx-font-size: 14px;" />
-    </VBox>
+            <top>
+                <VBox alignment="CENTER" spacing="8" BorderPane.alignment="CENTER">
+                    <padding>
+                        <Insets top="46"/>
+                    </padding>
+                    <Label styleClass="menu-eyebrow" text="BATTLESHIP"/>
+                    <Label styleClass="title" text="INGRESO DE COMANDANTE"/>
+                </VBox>
+            </top>
 
-    <!-- Action Buttons -->
-    <HBox alignment="CENTER" spacing="20.0">
-        <Button mnemonicParsing="false" onAction="#onHandleNewGame" style="-fx-background-color: #0fb9b1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;" text="NEW GAME" />
-        <Button mnemonicParsing="false" onAction="#onHandleContinue" style="-fx-background-color: #f7b731; -fx-text-fill: #1e272e; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;" text="CONTINUE GAME" />
-    </HBox>
-</VBox>
+            <center>
+                <StackPane>
+                    <VBox alignment="CENTER" maxHeight="280.0" maxWidth="400.0" spacing="25" styleClass="glass-panel-strong">
+                        <padding>
+                            <Insets bottom="34" left="34" right="34" top="34"/>
+                        </padding>
+
+                        <Label styleClass="subtitle" text="Identifícate para comandar tu flota"/>
+
+                        <VBox alignment="CENTER" spacing="10">
+                            <Label styleClass="input-label" text="NOMBRE DEL COMANDANTE" />
+                            <TextField fx:id="nicknameField" alignment="CENTER" promptText="Ej. Almirante Nelson" styleClass="custom-text-field" />
+                        </VBox>
+
+                        <!-- Único botón apuntando al método correcto -->
+                        <GameButton fx:id="enterButton" maxWidth="Infinity" onAction="#onHandleEnter" text="INGRESAR AL MENÚ"/>
+                    </VBox>
+                </StackPane>
+            </center>
+
+            <bottom>
+                <HBox alignment="BOTTOM_CENTER" prefHeight="59.0" spacing="10" styleClass="menu-footer">
+                    <padding>
+                        <Insets bottom="20"/>
+                    </padding>
+                    <Label styleClass="hud-label" text="Comando Naval"/>
+                    <Label styleClass="hud-label" text="•"/>
+                    <Label styleClass="hud-label" text="Preparación de Flota"/>
+                </HBox>
+            </bottom>
+
+        </BorderPane>
+
+    </children>
+</StackPane>

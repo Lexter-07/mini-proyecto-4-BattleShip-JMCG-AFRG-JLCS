@@ -1,0 +1,31 @@
+/* ===========================================================
+   ATTACK.CSS
+   Combat screen. Requires theme.css imported first.
+   =========================================================== */
+
+.screen-title {
+    -fx-font-family: "Orbitron", "Segoe UI", sans-serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -naval-text;
+    -fx-effect: dropshadow(gaussian, rgba(33,216,255,.4), 18, .35, 0, 0);
+}
+
+.grid-header {
+    -fx-font-family: "Rajdhani", "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -naval-text-dim;
+}
+
+.board-caption {
+    -fx-font-family: "Orbitron", "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.board-caption.own {
+    -fx-text-fill: -naval-accent;
+}
+.board-caption.enemy {
+    -fx-text-fill: -naval-hit;
+}
