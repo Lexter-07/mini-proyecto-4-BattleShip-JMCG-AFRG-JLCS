@@ -3,6 +3,7 @@ package com.example.battleship.model;
 import com.example.battleship.model.enums.AttackResult;
 import com.example.battleship.model.enums.Orientation;
 import com.example.battleship.model.enums.PlacementResult;
+import com.example.battleship.model.exceptions.InvalidShipPlacementException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -139,6 +140,27 @@ public class SeaMap implements Serializable {
         }
 
         return PlacementResult.SUCCESS;
+    }
+
+
+
+    /**
+     * Places a ship or throws an exception if the placement is invalid.
+     *
+     * @throws InvalidShipPlacementException if the ship cannot be placed.
+     */
+    public void placeShipOrThrow(
+            Ship ship,
+            Coordinate start,
+            Orientation orientation)
+            throws InvalidShipPlacementException {
+
+        PlacementResult result =
+                placeShip(ship, start, orientation);
+
+        if (result != PlacementResult.SUCCESS) {
+            throw new InvalidShipPlacementException(result);
+        }
     }
 
 

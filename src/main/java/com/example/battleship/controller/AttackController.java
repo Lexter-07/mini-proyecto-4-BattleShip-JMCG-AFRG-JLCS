@@ -7,6 +7,7 @@ import com.example.battleship.model.Ship;
 import com.example.battleship.model.Shot;
 import com.example.battleship.model.enums.AttackResult;
 import com.example.battleship.model.enums.Orientation;
+import com.example.battleship.model.exceptions.InvalidTurnException;
 import com.example.battleship.model.threads.IAThread;
 import com.example.battleship.model.threads.TurnThread;
 import com.example.battleship.view.ShipView;
@@ -218,15 +219,24 @@ public class AttackController {
         if (gameModel.isGameFinished() || !gameModel.isHumanTurn()) return;
 
         Coordinate coordinate = new Coordinate(row, column);
-        AttackResult result = gameModel.humanAttack(coordinate);
 
-        if (result == AttackResult.ALREADY_ATTACKED) return;
 
-        updateCellVisuals(enemyButtons[row][column], result);
+        try {
+            AttackResult result = gameModel.humanAttack(coordinate);
+            if (result == AttackResult.ALREADY_ATTACKED) return;
 
-        if (result == AttackResult.SUNK) {
-            paintSunkShip(gameModel.getMachineShipAt(coordinate), enemyButtons);
+            updateCellVisuals(enemyButtons[row][column], result);
+
+            if (result == AttackResult.SUNK) {
+                paintSunkShip(gameModel.getMachineShipAt(coordinate), enemyButtons);
+            }
+
+        } catch (InvalidTurnException e) {
+
+            System.err.println(e.getMessage());
+
         }
+
 
         // NUEVO: Guardado directo, instantáneo y seguro
         gameModel.saveGame();

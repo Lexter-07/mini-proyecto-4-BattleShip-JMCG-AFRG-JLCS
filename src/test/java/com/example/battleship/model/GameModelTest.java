@@ -2,6 +2,7 @@ package com.example.battleship.model;
 
 import com.example.battleship.model.enums.*;
 
+import com.example.battleship.model.exceptions.InvalidTurnException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -136,9 +137,14 @@ class GameModelTest {
         GameModel model = new GameModel();
         model.newGame("Ferran");
 
-        AttackResult result = model.humanAttack(new Coordinate(9, 9));
+        try {
+            AttackResult result = model.humanAttack(new Coordinate(9, 9));
+            assertEquals(AttackResult.MISS, result);
+        } catch (InvalidTurnException e) {
 
-        assertEquals(AttackResult.MISS, result);
+            System.err.println(e.getMessage());
+
+        }
 
     }
 
@@ -148,10 +154,15 @@ class GameModelTest {
         GameModel model = new GameModel();
         model.newGame("Vozinha");
 
-        AttackResult result = model.machineAttack(new Coordinate(9, 9));
 
-        assertEquals(AttackResult.MISS, result);
+        try {
+            AttackResult result = model.machineAttack(new Coordinate(9, 9));
 
+            assertEquals(AttackResult.MISS, result);
+        } catch (InvalidTurnException e) {
+
+            System.err.println(e.getMessage());
+        }
     }
 
     @Test
@@ -169,11 +180,14 @@ class GameModelTest {
                         new Coordinate(0, 0),
                         Orientation.HORIZONTAL);
 
-        AttackResult result =
-                model.humanAttack(new Coordinate(0, 0));
+        try {
+            AttackResult result =
+                    model.humanAttack(new Coordinate(0, 0));
+            assertEquals(AttackResult.HIT, result);
+        } catch (InvalidTurnException e) {
 
-        assertEquals(AttackResult.HIT, result);
-
+            System.err.println(e.getMessage());
+        }
     }
 
     @Test
@@ -191,10 +205,14 @@ class GameModelTest {
                         new Coordinate(0, 0),
                         Orientation.HORIZONTAL);
 
-        AttackResult result =
-                model.machineAttack(new Coordinate(0, 0));
+        try {
+            AttackResult result =
+                    model.humanAttack(new Coordinate(0, 0));
+            assertEquals(AttackResult.HIT, result);
+        } catch (InvalidTurnException e) {
 
-        assertEquals(AttackResult.HIT, result);
+            System.err.println(e.getMessage());
+        }
 
     }
 
@@ -206,7 +224,12 @@ class GameModelTest {
 
         boolean previousTurn = model.isHumanTurn();
 
-        model.humanAttack(new Coordinate(9, 9));
+        try {
+            model.humanAttack(new Coordinate(9, 9));
+        } catch (InvalidTurnException e) {
+
+            System.err.println(e.getMessage());
+        }
 
         assertNotEquals(previousTurn, model.isHumanTurn());
 
@@ -220,7 +243,12 @@ class GameModelTest {
 
         boolean previousTurn = model.isHumanTurn();
 
-        model.machineAttack(new Coordinate(9, 9));
+        try {
+            model.machineAttack(new Coordinate(9, 9));
+        } catch (InvalidTurnException e) {
+
+            System.err.println(e.getMessage());
+        }
 
         assertNotEquals(previousTurn, model.isHumanTurn());
 

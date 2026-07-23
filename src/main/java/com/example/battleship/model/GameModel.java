@@ -3,7 +3,7 @@ package com.example.battleship.model;
 import com.example.battleship.model.enums.AttackResult;
 import com.example.battleship.model.enums.Orientation;
 import com.example.battleship.model.enums.PlacementResult;
-import com.example.battleship.model.enums.ShipType;
+import com.example.battleship.model.exceptions.InvalidTurnException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -159,11 +159,15 @@ public class GameModel implements Serializable {
     // ===========================
 
     /**
-     * The human shots to machine's Board.
-     * Si atina, the turns continue.
-     * if fails, the turn change.
+     * The human shoots at the machine's board.
+     * If the shot misses, the turn changes.
      */
-    public AttackResult humanAttack(Coordinate coordinate) {
+    public AttackResult humanAttack(Coordinate coordinate)
+            throws InvalidTurnException {
+
+        if (!gameStatus.isHumanTurn()) {
+            throw new InvalidTurnException();
+        }
 
         AttackResult result = gameStatus
                 .getMachinePlayer()
@@ -173,14 +177,22 @@ public class GameModel implements Serializable {
         if (result == AttackResult.MISS) {
             gameStatus.changeTurn();
         }
+
         return result;
     }
 
 
     /**
-     * La Maquina shoots aleatoariamente to Player Board.
+     * The machine shoots at the human's board.
+     * If the shot misses, the turn changes.
      */
-    public AttackResult machineAttack(Coordinate coordinate) {
+    public AttackResult machineAttack(Coordinate coordinate)
+            throws InvalidTurnException {
+
+        if (gameStatus.isHumanTurn()) {
+            throw new InvalidTurnException();
+        }
+
         AttackResult result = gameStatus
                 .getHumanPlayer()
                 .getSeaMap()

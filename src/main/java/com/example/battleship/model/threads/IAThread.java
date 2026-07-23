@@ -3,6 +3,7 @@ package com.example.battleship.model.threads;
 import com.example.battleship.model.Coordinate;
 import com.example.battleship.model.GameModel;
 import com.example.battleship.model.enums.AttackResult;
+import com.example.battleship.model.exceptions.InvalidTurnException;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -77,26 +78,34 @@ public class IAThread extends Thread {
                     shot = availableShots.remove(0);
                 }
 
-                AttackResult result = gameModel.machineAttack(shot);
 
-                // ¡ESTA ES LA LÍNEA QUE EVITA QUE SE TRABE!
-                if (result == AttackResult.ALREADY_ATTACKED) {
-                    continue;
-                }
+                try {
 
-                // ==========================================
-                // EVALUACIÓN POST-DISPARO
-                // ==========================================
-                if (result == AttackResult.HIT) {
-                    // Si impactamos, buscamos a su alrededor
-                    addAdjacentTargets(shot);
-                } else if (result == AttackResult.SUNK) {
-                    // Si hundimos el barco, cancelamos la búsqueda focalizada
-                    huntingTargets.clear();
-                }
+                    AttackResult result = gameModel.machineAttack(shot);
 
-                if (onUIAttackUpdate != null) {
-                    Platform.runLater(() -> onUIAttackUpdate.accept(shot, result));
+                    // ¡ESTA ES LA LÍNEA QUE EVITA QUE SE TRABE!
+                    if (result == AttackResult.ALREADY_ATTACKED) {
+                        continue;
+                    }
+
+                    // ==========================================
+                    // EVALUACIÓN POST-DISPARO
+                    // ==========================================
+                    if (result == AttackResult.HIT) {
+                        // Si impactamos, buscamos a su alrededor
+                        addAdjacentTargets(shot);
+                    } else if (result == AttackResult.SUNK) {
+                        // Si hundimos el barco, cancelamos la búsqueda focalizada
+                        huntingTargets.clear();
+                    }
+
+                    if (onUIAttackUpdate != null) {
+                        Platform.runLater(() -> onUIAttackUpdate.accept(shot, result));
+                    }
+
+                } catch (InvalidTurnException e) {
+
+                    System.err.println(e.getMessage());
                 }
 
             } else {
