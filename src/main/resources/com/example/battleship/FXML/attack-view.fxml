@@ -82,6 +82,14 @@
             <RowConstraints minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
+      <Pane
+              fx:id="playerFleetPane"
+              layoutX="112.0"
+              layoutY="176.0"
+              prefHeight="390.0"
+              prefWidth="390.0"
+              mouseTransparent="true"
+              pickOnBounds="false"/>
 
       <!-- ================= ENEMY BOARD ================= -->
       <Region layoutX="680.0" layoutY="94.0" mouseTransparent="true" prefHeight="470.0" prefWidth="470.0" styleClass="glass-panel" />

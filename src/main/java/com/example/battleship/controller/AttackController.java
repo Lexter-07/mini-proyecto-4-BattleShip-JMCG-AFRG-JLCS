@@ -13,6 +13,8 @@ import com.example.battleship.model.threads.TurnThread;
 import com.example.battleship.view.ShipView;
 import com.example.battleship.view.fx.CombatEffects;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -28,6 +30,7 @@ public class AttackController {
 
     @FXML private AnchorPane rootPane;
 
+    @FXML private Pane playerFleetPane;
     @FXML private GridPane enemyGrid;
     @FXML private GridPane playerGrid;
     @FXML private Pane enemyFleetPane;
@@ -203,12 +206,39 @@ public class AttackController {
     }
 
     private void drawPlayerShips() {
-        List<Ship> humanShips = gameModel.getHumanPlayer().getSeaMap().getShips();
-        for (Ship ship : humanShips) {
-            for (Coordinate coord : ship.getPositions()) {
-                Button btn = playerButtons[coord.getRow()][coord.getColumn()];
-                btn.setStyle("-fx-background-color: #7f8fa6; -fx-border-color: #2f3640; -fx-border-width: 1;");
-            }
+
+        playerFleetPane.getChildren().clear();
+
+        for (Ship ship : gameModel.getHumanPlayer().getSeaMap().getShips()) {
+
+            StackPane pane = new StackPane();
+
+            ShipView shipView = new ShipView(pane, ship);
+
+            pane.setMouseTransparent(true);
+
+            playerFleetPane.getChildren().add(pane);
+
+            positionPlayerShip(shipView);
+        }
+    }
+
+    private void positionPlayerShip(ShipView shipView) {
+
+        Ship ship = shipView.getShip();
+
+        Coordinate start = ship.getStartCoordinate();
+
+        double cell = 39;
+
+        double x = start.getColumn() * cell;
+        double y = start.getRow() * cell;
+
+        shipView.getView().setLayoutX(x);
+        shipView.getView().setLayoutY(y);
+
+        if (ship.getOrientation() == Orientation.VERTICAL) {
+            shipView.rotate();
         }
     }
 
