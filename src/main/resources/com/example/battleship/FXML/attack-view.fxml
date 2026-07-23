@@ -7,61 +7,56 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0"
-            prefWidth="1180.0" stylesheets="@../CSS/theme.css,@../CSS/attack.css"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.battleship.controller.AttackController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1180.0" stylesheets="@../CSS/theme.css,@../CSS/attack.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.battleship.controller.AttackController">
    <children>
 
-      <OceanCanvas/>
+      <OceanCanvas />
 
-      <Label layoutX="40.0" layoutY="22.0" styleClass="menu-eyebrow" text="FASE DE COMBATE"/>
-      <Label layoutX="40.0" layoutY="44.0" styleClass="screen-title" text="Batalla Naval"/>
+      <Label layoutX="40.0" layoutY="22.0" styleClass="menu-eyebrow" text="FASE DE COMBATE" />
+      <Label layoutX="40.0" layoutY="44.0" styleClass="screen-title" text="Batalla Naval" />
 
-      <GameButton layoutX="1108.0" layoutY="20.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0"
-                  style="-fx-padding: 0;" text="?"/>
+      <GameButton layoutX="1108.0" layoutY="20.0" mnemonicParsing="false" onMousePressed="#onShowEnemyFleet" onMouseReleased="#onHideEnemyFleet" prefHeight="34.0" prefWidth="34.0" style="-fx-padding: 0;" text="?" />
 
       <!-- ================= PLAYER BOARD ================= -->
-      <Region layoutX="30.0" layoutY="94.0" prefHeight="470.0" prefWidth="470.0" styleClass="glass-panel"
-              mouseTransparent="true"/>
-      <Label layoutX="60.0" layoutY="112.0" styleClass="board-caption own" text="⚓  TU FLOTA"/>
+      <Region layoutX="30.0" layoutY="94.0" mouseTransparent="true" prefHeight="470.0" prefWidth="470.0" styleClass="glass-panel" />
+      <Label layoutX="60.0" layoutY="112.0" styleClass="board-caption own" text="⚓  TU FLOTA" />
 
       <HBox layoutX="112.0" layoutY="150.0" prefWidth="390.0" spacing="0">
          <children>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="1"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="2"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="3"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="4"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="5"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="6"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="7"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="8"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="9"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="10"/>
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="1" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="2" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="3" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="4" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="5" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="6" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="7" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="8" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="9" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="10" />
          </children>
       </HBox>
 
-      <VBox layoutX="80.0" layoutY="176.0" prefHeight="390.0" spacing="0" alignment="CENTER">
+      <VBox alignment="CENTER" layoutX="80.0" layoutY="176.0" prefHeight="390.0" spacing="0">
          <children>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="A"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="B"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="C"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="D"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="E"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="F"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="G"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="H"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="I"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="J"/>
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="A" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="B" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="C" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="D" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="E" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="F" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="G" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="H" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="I" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="J" />
          </children>
       </VBox>
 
-      <GridPane fx:id="playerGrid" alignment="CENTER" layoutX="112.0" layoutY="176.0" prefHeight="390.0"
-                prefWidth="390.0" styleClass="board-surface,board-surface-own">
+      <GridPane fx:id="playerGrid" alignment="CENTER" layoutX="112.0" layoutY="176.0" prefHeight="390.0" prefWidth="390.0" styleClass="board-surface,board-surface-own">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="39.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="39.0" />
@@ -89,42 +84,41 @@
       </GridPane>
 
       <!-- ================= ENEMY BOARD ================= -->
-      <Region layoutX="680.0" layoutY="94.0" prefHeight="470.0" prefWidth="470.0" styleClass="glass-panel"
-              mouseTransparent="true"/>
-      <Label layoutX="710.0" layoutY="112.0" styleClass="board-caption enemy" text="🎯  FLOTA ENEMIGA"/>
+      <Region layoutX="680.0" layoutY="94.0" mouseTransparent="true" prefHeight="470.0" prefWidth="470.0" styleClass="glass-panel" />
+      <Label layoutX="710.0" layoutY="112.0" styleClass="board-caption enemy" text="🎯  FLOTA ENEMIGA" />
 
       <HBox layoutX="762.0" layoutY="150.0" prefWidth="390.0" spacing="0">
          <children>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="1"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="2"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="3"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="4"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="5"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="6"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="7"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="8"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="9"/>
-            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="10"/>
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="1" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="2" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="3" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="4" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="5" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="6" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="7" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="8" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="9" />
+            <Label alignment="CENTER" prefWidth="39" styleClass="grid-header" text="10" />
          </children>
       </HBox>
 
-      <VBox layoutX="730.0" layoutY="176.0" prefHeight="390.0" spacing="0" alignment="CENTER">
+      <VBox alignment="CENTER" layoutX="730.0" layoutY="176.0" prefHeight="390.0" spacing="0">
          <children>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="A"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="B"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="C"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="D"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="E"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="F"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="G"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="H"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="I"/>
-            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="J"/>
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="A" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="B" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="C" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="D" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="E" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="F" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="G" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="H" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="I" />
+            <Label alignment="CENTER" prefHeight="39" styleClass="grid-header" text="J" />
          </children>
       </VBox>
 
-      <GridPane fx:id="enemyGrid" alignment="CENTER" layoutX="762.0" layoutY="176.0" prefHeight="390.0"
-                prefWidth="390.0" styleClass="board-surface,board-surface-enemy">
+      <GridPane fx:id="enemyGrid" alignment="CENTER" layoutX="762.0" layoutY="176.0" prefHeight="390.0" prefWidth="390.0" styleClass="board-surface,board-surface-enemy">
+         <Pane fx:id="enemyFleetPane" layoutX="762" layoutY="176" mouseTransparent="true" pickOnBounds="false" prefHeight="390" prefWidth="390" />
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="39.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="39.0" />

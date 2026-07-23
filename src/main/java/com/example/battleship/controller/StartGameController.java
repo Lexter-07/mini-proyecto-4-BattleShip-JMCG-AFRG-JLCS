@@ -22,7 +22,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StartGameController {
 
@@ -58,11 +60,18 @@ public class StartGameController {
     }
 
     private void pressedShip(MouseEvent event) {
+
+        System.out.println("CLICK SHIP");
+
         StackPane pane = (StackPane) event.getSource();
         selectedShipView = shipViews.get(pane);
+
         Point2D point = rootPane.sceneToLocal(event.getSceneX(), event.getSceneY());
+
         xOffset = point.getX() - pane.getLayoutX();
         yOffset = point.getY() - pane.getLayoutY();
+
+        pane.toFront();
     }
 
     private void createShips() {
@@ -85,7 +94,7 @@ public class StartGameController {
     }
 
     @FXML void onMouseDragged(MouseEvent event) { moveShip(event); }
-    @FXML void onMousePressedShip(MouseEvent event) { pressedShip(event); }
+    @FXML void onMousePressedShip(MouseEvent event) {pressedShip(event);}
 
     @FXML
     void onMouseReleased(MouseEvent event) {
@@ -95,28 +104,39 @@ public class StartGameController {
         }
 
         Coordinate coordinate = calculateCoordinate();
-        PlacementResult result = gameModel.placeShip(selectedShipView.getShip(), coordinate, selectedShipView.getShip().getOrientation());
+        PlacementResult result = gameModel.placeShip(selectedShipView.getShip(),
+                coordinate, selectedShipView.getShip().getOrientation());
 
         if (result != PlacementResult.SUCCESS) {
             returnToOrigin();
             return;
         }
 
-        snapShip(coordinate);
+        snapShip(selectedShipView, coordinate);
         selectedShipView.playSnapEffect();
         enableConfirmButton();
     }
 
-    private void snapShip(Coordinate coordinate) {
-        StackPane pane = selectedShipView.getView();
+
+
+    private void snapShip(ShipView shipView, Coordinate coordinate) {
+        StackPane pane = shipView.getView();
+
         double cellWidth = seaGrid.getWidth() / SeaMap.COLUMNS;
         double cellHeight = seaGrid.getHeight() / SeaMap.ROWS;
+
         Bounds gridBounds = seaGrid.localToScene(seaGrid.getBoundsInLocal());
+
         double sceneX = gridBounds.getMinX() + coordinate.getColumn() * cellWidth;
         double sceneY = gridBounds.getMinY() + coordinate.getRow() * cellHeight;
+
         Point2D point = rootPane.sceneToLocal(sceneX, sceneY);
-        selectedShipView.animateMoveTo(point.getX(), point.getY());
+
+        shipView.animateMoveTo(point.getX(), point.getY());
+        pane.toFront();
     }
+
+
 
     private Coordinate calculateCoordinate() {
         StackPane pane = selectedShipView.getView();
@@ -131,6 +151,8 @@ public class StartGameController {
         return new Coordinate(row, column);
     }
 
+
+
     private void returnToOrigin() {
         Point2D origin = selectedShipView.getOriginalPosition();
         gameModel.unplaceShip(selectedShipView.getShip());
@@ -140,6 +162,8 @@ public class StartGameController {
         selectedShipView.animateMoveTo(origin.getX(), origin.getY());
     }
 
+
+
     private boolean isInsideGrid(MouseEvent event) {
         Bounds gridBounds = seaGrid.localToScene(seaGrid.getBoundsInLocal());
         double mouseX = event.getSceneX();
@@ -147,6 +171,37 @@ public class StartGameController {
         return mouseX >= gridBounds.getMinX() && mouseX <= gridBounds.getMaxX() &&
                 mouseY >= gridBounds.getMinY() && mouseY <= gridBounds.getMaxY();
     }
+
+
+
+    @FXML
+    void onHandleAutoPlace(ActionEvent event) {
+
+        if (gameModel == null) return;
+
+        List<Ship> ships = new ArrayList<>();
+
+        for (ShipView shipView : shipViews.values()) {
+            ships.add(shipView.getShip());
+        }
+
+        gameModel.autoPlaceHumanFleet(ships);
+
+        for (ShipView shipView : shipViews.values()) {
+            Ship ship = shipView.getShip();
+
+            if (ship.getOrientation() != shipView.getDisplayedOrientation()) {
+                shipView.rotate();
+            }
+
+            snapShip(shipView, ship.getStartCoordinate());
+            shipView.playSnapEffect();
+        }
+        enableConfirmButton();
+    }
+
+
+
 
     @FXML
     void onHandleRotate(ActionEvent event) {
@@ -158,14 +213,17 @@ public class StartGameController {
         if (result != PlacementResult.SUCCESS) return;
         ship.setOrientation(newOrientation);
         selectedShipView.rotate();
-        snapShip(coordinate);
+        snapShip(selectedShipView, coordinate);
     }
+
+
 
     private void enableConfirmButton() {
         if (gameModel != null && gameModel.getHumanPlayer() != null) {
             confirmButton.setDisable(!gameModel.getHumanPlayer().getSeaMap().hasAllShipsPlaced());
         }
     }
+
 
     @FXML
     void onHandleConfirm(ActionEvent event) throws IOException {

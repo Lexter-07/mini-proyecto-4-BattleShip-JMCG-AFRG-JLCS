@@ -6,23 +6,34 @@ import com.example.battleship.model.SeaMap;
 import com.example.battleship.model.Ship;
 import com.example.battleship.model.Shot;
 import com.example.battleship.model.enums.AttackResult;
+import com.example.battleship.model.enums.Orientation;
 import com.example.battleship.model.threads.IAThread;
 import com.example.battleship.model.threads.TurnThread;
+import com.example.battleship.view.ShipView;
 import com.example.battleship.view.fx.CombatEffects;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AttackController {
 
+    @FXML private AnchorPane rootPane;
+
     @FXML private GridPane enemyGrid;
     @FXML private GridPane playerGrid;
+    @FXML private Pane enemyFleetPane;
 
     private final Button[][] enemyButtons = new Button[10][10];
     private final Button[][] playerButtons = new Button[10][10];
+    private final HashMap<Ship, ShipView> enemyShipViews = new HashMap<>();
 
     private GameModel gameModel;
 
@@ -40,7 +51,8 @@ public class AttackController {
         this.gameModel = gameModel;
 
         drawPlayerShips();
-        restoreBoardState(); // NUEVO: Recupera el estado visual de la partida
+        createEnemyFleetViews();
+        restoreBoardState();
         initializeThreads();
         updateBoardInteractivity();
     }
@@ -67,6 +79,69 @@ public class AttackController {
             updateCellVisuals(btn, shot.getResult());
         }
     }
+
+
+
+
+    private void createEnemyFleetViews() {
+        enemyFleetPane.getChildren().clear();
+        enemyShipViews.clear();
+
+        for (Ship ship : gameModel.getMachinePlayer().getSeaMap().getShips()) {
+
+            StackPane pane = new StackPane();
+            ShipView shipView = new ShipView(pane, ship);
+
+            pane.setMouseTransparent(true);
+            pane.setVisible(false);
+
+            enemyFleetPane.getChildren().add(pane);
+            enemyShipViews.put(ship, shipView);
+
+            positionEnemyShip(shipView);
+        }
+    }
+
+
+
+
+    private void positionEnemyShip(ShipView shipView) {
+
+        Ship ship = shipView.getShip();
+
+        Coordinate start = ship.getStartCoordinate();
+
+        double cell = 39;
+
+        double x = start.getColumn() * cell;
+        double y = start.getRow() * cell;
+
+        shipView.getView().setLayoutX(x);
+        shipView.getView().setLayoutY(y);
+
+        if (ship.getOrientation() == Orientation.VERTICAL) {
+            shipView.rotate();
+        }
+    }
+
+
+
+    @FXML
+    void onShowEnemyFleet(MouseEvent event) {
+        for (ShipView shipView : enemyShipViews.values()) {
+            shipView.getView().setVisible(true);
+        }
+    }
+
+
+    @FXML
+    void onHideEnemyFleet(MouseEvent event) {
+        for (ShipView shipView : enemyShipViews.values()) {
+            shipView.getView().setVisible(false);
+        }
+    }
+
+
 
     // ==========================================
     // Inicialización y Gestión de Hilos
@@ -172,8 +247,8 @@ public class AttackController {
     private void updateCellVisuals(Button button, AttackResult result) {
         switch (result) {
             case MISS:
-                button.setText("O");
-                button.setStyle("-fx-background-color: #353b48; -fx-text-fill: white;");
+                button.setText("•");
+                button.setStyle("-fx-background-color: #0b5986; -fx-text-fill: white;");
                 CombatEffects.playMiss(button);
                 break;
             case HIT:
@@ -192,7 +267,7 @@ public class AttackController {
         List<Button> shipCells = new ArrayList<>();
         for (Coordinate coordinate : ship.getPositions()) {
             Button button = gridButtons[coordinate.getRow()][coordinate.getColumn()];
-            button.setStyle("-fx-background-color: #c23616;");
+            button.setStyle("-fx-background-color: #610d0d;");
             shipCells.add(button);
         }
         CombatEffects.playSunk(shipCells);
