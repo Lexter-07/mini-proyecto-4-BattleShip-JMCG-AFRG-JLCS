@@ -1,4 +1,0 @@
-Nickname: Ozuna
-Human Sunk Ships: 8
-Machine Sunk Ships: 9
-Human Turn: true
