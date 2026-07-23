@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.SVGPath?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="40.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40" prefWidth="80" rotate="-90.0">
+         <children>
+            <SVGPath content="         M0 20         L15 7         L62 7         C72 8 78 14 80 20         C78 26 72 32 62 33         L15 33         Z" fill="#4b4b4b" />
+            <Rectangle arcHeight="5" arcWidth="5" fill="#969696" height="24.0" layoutY="3.0" width="16.0" x="5" y="5" />
+            <Circle centerX="18" centerY="20" fill="#4a4a4a" layoutX="-5.0" radius="8.0" />
+            <Rectangle fill="#5a3205" height="16" layoutX="-5.0" width="40.0" x="25" y="12" />
+            <Rectangle arcHeight="1.0" arcWidth="5" fill="#969696" height="19.0" layoutX="22.0" layoutY="5.0" width="16.0" x="5" y="5" />
+            <Rectangle fill="#8c8c8c" height="20" width="10" x="45" y="10" />
+            <Rectangle fill="#383838" height="33.0" layoutX="-3.0" layoutY="-3.0" width="5" x="38" y="7" />
+            <Circle centerX="50" centerY="10" fill="BLACK" radius="5" />
+            <Circle centerX="50" centerY="10" fill="#555555" radius="2" />
+            <Circle centerX="50" centerY="30" fill="BLACK" radius="5" />
+            <Circle centerX="50" centerY="30" fill="#555555" radius="2" />
+            <Line endX="50" endY="36" layoutY="2.0" startX="50" startY="4" stroke="BLACK" strokeWidth="1" />
+            <SVGPath content="         M55 12         L62 20         L55 28         Z" fill="#5a3205" layoutX="5.0" />
+            <Circle centerX="60" centerY="15" fill="#aaaaaa" radius="2" />
+            <Circle centerX="60" centerY="25" fill="#aaaaaa" radius="2" />
+            <Circle centerX="32" centerY="20" fill="#ffd900" radius="2" />
+            <Circle centerX="31" centerY="14" fill="WHITE" radius="1" />
+            <Circle centerX="31" centerY="26" fill="WHITE" radius="1" />
+            <Line endX="50" endY="0" layoutY="2.0" startX="50" startY="5" stroke="BLACK" strokeWidth="1" />
+            <Line endX="50" endY="0" layoutX="12.0" layoutY="10.0" rotate="47.6" startX="50" startY="5" stroke="BLACK" strokeWidth="1" />
+            <Line endX="50" endY="0" layoutX="10.0" layoutY="25.0" startX="53.60000228881836" startY="4.600002288818359" stroke="BLACK" strokeWidth="1" />
+            <Circle centerX="68" centerY="20" fill="BLACK" radius="6" />
+            <Line endX="80" endY="20" layoutX="-3.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+            <Line endX="80" endY="20" layoutX="-3.0" layoutY="3.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+            <Line endX="80" endY="20" layoutX="-3.0" layoutY="-3.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+            <Circle centerX="68" centerY="20" fill="BLACK" layoutX="-55.0" radius="6" />
+            <Line endX="80" endY="20" layoutX="-58.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+            <Line endX="80" endY="20" layoutX="-58.0" layoutY="3.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+            <Line endX="80" endY="20" layoutX="-58.0" layoutY="-3.0" startX="68" startY="20" stroke="BLACK" strokeWidth="2" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

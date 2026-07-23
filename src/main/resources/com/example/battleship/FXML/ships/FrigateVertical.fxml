@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+
+
+<StackPane alignment="CENTER" rotate="-90.0" stylesheets="@../../CSS/ships.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="40.0" prefWidth="40.0">
+         <children>
+            <Rectangle fill="#767676" height="19.0" layoutX="1.0" layoutY="11.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="23.0" />
+            <Polygon fill="#969696" layoutX="7.0" layoutY="14.0" points="17.0, 15.999996185302734, 30.799999237060547, 6.1999969482421875, 17.0, -3.000002861022949" stroke="#595959" strokeType="INSIDE" strokeWidth="0.0" />
+            <Line endX="6.399993896484375" endY="-6.399996757507324" layoutX="25.0" layoutY="20.0" startX="2.8999977111816406" startY="-2.200000762939453" strokeWidth="0.2" />
+            <Circle fill="#464646" layoutX="28.0" layoutY="18.0" radius="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Line endX="5.899993896484375" endY="2.9999961853027344" layoutX="25.0" layoutY="27.0" startX="2.8999977111816406" startY="-2.200000762939453" strokeWidth="0.2" />
+            <Circle fill="#464646" layoutX="28.0" layoutY="25.0" radius="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Line endX="7.0" endY="-2.200000762939453" layoutX="30.0" layoutY="23.0" startX="2.8999977111816406" startY="-2.200000762939453" strokeWidth="0.2" />
+            <Circle fill="#464646" layoutX="33.0" layoutY="21.0" radius="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Rectangle fill="#cfcfcf" height="17.0" layoutX="8.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="14.0" />
+            <Circle fill="#464646" layoutX="5.0" layoutY="21.0" radius="2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Rectangle fill="#a4a0a0" height="15.0" layoutX="10.0" layoutY="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="10.0" />
+            <Line endX="6.399993896484375" endY="-6.399996757507324" layoutY="25.0" startX="2.8999977111816406" startY="-2.200000762939453" strokeWidth="0.2" />
+            <Line endX="11.800003051757812" endY="-2.200000762939453" layoutX="8.0" layoutY="23.0" rotate="90.0" startX="2.8999977111816406" startY="-2.200000762939453" stroke="#363636" strokeWidth="1.5" />
+            <Circle fill="WHITE" layoutX="15.0" layoutY="21.0" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

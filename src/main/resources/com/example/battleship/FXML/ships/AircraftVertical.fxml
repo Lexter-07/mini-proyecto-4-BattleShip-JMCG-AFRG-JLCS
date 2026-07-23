@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160" prefWidth="40" stylesheets="@../../CSS/ships.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="160.0" rotate="90.0">
+         <children>
+            <SVGPath content="             M2 20             C6 9 18 3 30 3             L136 3             C148 3 156 9 158 20             C156 31 148 37 136 37             L30 37             C18 37 6 31 2 20 Z" styleClass="carrier-hull" />
+            <Rectangle arcHeight="4" arcWidth="4" height="29.0" layoutX="2.0" styleClass="carrier-deck" width="130.0" x="12" y="6" />
+            <Line endX="102.79999542236328" endY="16.399993896484375" layoutX="2.0" layoutY="-1.0" startX="67.79999542236328" startY="28.800003051757812" styleClass="deck-line" />
+            <Rectangle arcHeight="2" arcWidth="2" height="8.0" layoutX="-27.0" layoutY="18.0" styleClass="carrier-bridge" width="31.0" x="118" y="5" />
+            <Rectangle arcHeight="3" arcWidth="3" height="14" layoutX="15.0" layoutY="11.0" styleClass="carrier-island" width="20" x="108" y="9" AnchorPane.bottomAnchor="7.100000000000001" AnchorPane.leftAnchor="122.5" AnchorPane.rightAnchor="22.099999999999994" AnchorPane.topAnchor="19.5" />
+            <Circle centerX="121" centerY="9" layoutX="17.0" layoutY="20.0" radius="1.2" styleClass="window" />
+            <Circle centerX="125" centerY="9" layoutX="13.0" layoutY="16.0" radius="1.2" styleClass="window" />
+            <Line endX="123" endY="1" layoutX="-16.0" layoutY="24.0" startX="123" startY="5" styleClass="antenna" />
+            <Line endX="127.00000762939453" endY="2.000001907348633" layoutX="-15.0" layoutY="25.0" startX="118.00000762939453" startY="2.000001907348633" styleClass="antenna" />
+            <Circle centerX="123" centerY="0" layoutX="11.0" layoutY="27.0" radius="2" styleClass="carrier-radar" />
+            <Circle centerX="8" centerY="20" layoutX="120.0" layoutY="7.0" radius="2" styleClass="ship-light" />
+            <Line endX="140.0" endY="28.0" layoutX="2.0" layoutY="-13.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-10.0" layoutY="-13.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-30.0" layoutY="-13.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-20.0" layoutY="-13.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-10.0" layoutY="-1.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-30.0" layoutY="-1.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-20.0" layoutY="-1.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="3.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-3.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-6.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-9.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-12.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-15.0" startX="68.0" startY="28" styleClass="deck-line" />
+            <Line endX="74.4000015258789" endY="28.0" layoutX="-42.0" layoutY="-18.0" startX="68.0" startY="28" styleClass="deck-line" />
+         </children>
+      </AnchorPane>
+   </children>
+
+</StackPane>

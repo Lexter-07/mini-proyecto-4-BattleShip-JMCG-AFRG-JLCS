@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.ClosePath?>
+<?import javafx.scene.shape.LineTo?>
+<?import javafx.scene.shape.MoveTo?>
+<?import javafx.scene.shape.Path?>
+
+<StackPane maxHeight="40" maxWidth="40" prefHeight="40" prefWidth="40" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <children>
+      
+          <!-- Llama exterior -->
+          <Path fill="#FF6B00" stroke="#D84315" strokeWidth="1">
+              <elements>
+                  <MoveTo x="20" y="2" />
+                  <LineTo x="27" y="14" />
+                  <LineTo x="33" y="22" />
+                  <LineTo x="31" y="31" />
+                  <LineTo x="24" y="37" />
+                  <LineTo x="15" y="37" />
+                  <LineTo x="8" y="31" />
+                  <LineTo x="7" y="22" />
+                  <LineTo x="13" y="15" />
+                  <LineTo x="17" y="20" />
+                  <LineTo x="20" y="2" />
+                  <ClosePath />
+              </elements>
+          </Path>
+      
+          <!-- Parte amarilla interna -->
+          <Path fill="#FFD600" stroke="#bc0000">
+              <elements>
+                  <MoveTo x="20" y="12" />
+                  <LineTo x="25" y="22" />
+                  <LineTo x="24" y="29" />
+                  <LineTo x="20" y="34" />
+                  <LineTo x="15" y="29" />
+                  <LineTo x="16" y="22" />
+                  <LineTo x="20" y="12" />
+                  <ClosePath />
+              </elements>
+          </Path>
+      
+          <!-- Núcleo blanco/amarillo -->
+          <Circle centerX="20" centerY="27" fill="#FFF59D" layoutY="2.0" opacity="0.92" radius="7.0" />
+      </children>
+   </AnchorPane>
+
+</StackPane>

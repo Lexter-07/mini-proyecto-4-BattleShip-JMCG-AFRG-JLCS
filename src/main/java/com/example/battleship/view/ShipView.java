@@ -9,17 +9,13 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.effect.DropShadow;
+import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import java.io.IOException;
 
 /**
  * Graphical wrapper around a {@link Ship}. Keeps the exact public API the
@@ -32,6 +28,9 @@ public class ShipView {
 
     private static final double CELL_SIZE = 40;
 
+    private static final String SHIPS_PATH =
+            "/com/example/battleship/FXML/ships/";
+
     private final StackPane view;
     private final Ship ship;
 
@@ -43,6 +42,8 @@ public class ShipView {
         this.ship = ship;
 
         view.setPickOnBounds(true);
+
+        view.getStyleClass().add("ship-node");
 
         displayedOrientation = ship.getOrientation();
 
@@ -74,17 +75,31 @@ public class ShipView {
      * "turn" flourish (squash + fade) instead of an instant size swap.
      */
     public void rotate() {
+
         displayedOrientation = ship.getOrientation();
 
         ScaleTransition squash = new ScaleTransition(Duration.millis(90), view);
+
         squash.setToX(0.15);
+
         squash.setOnFinished(e -> {
+
             rebuildHull();
-            ScaleTransition restore = new ScaleTransition(Duration.millis(120), view);
-            restore.setToX(1.0);
+
+            view.applyCss();
+            view.layout();
+
+            ScaleTransition restore =
+                    new ScaleTransition(Duration.millis(120), view);
+
+            restore.setToX(1);
+
             restore.play();
+
         });
+
         squash.play();
+
     }
 
     /** Animated move (used instead of an instant setLayoutX/Y). */
@@ -123,122 +138,81 @@ public class ShipView {
     // ===========================
 
     private void rebuildHull() {
-        boolean horizontal = ship.getOrientation() == Orientation.HORIZONTAL;
-        int size = ship.getSize();
 
-        double length = size * CELL_SIZE;
-        double width = CELL_SIZE;
+        try {
 
-        double w = horizontal ? length : width;
-        double h = horizontal ? width : length;
+            FXMLLoader loader =
+                    new FXMLLoader(getClass().getResource(
+                            SHIPS_PATH + getFXMLName()));
 
-        view.setPrefWidth(w);
-        view.setPrefHeight(h);
-        view.setMinWidth(w);
-        view.setMinHeight(h);
+            Parent shipGraphic = loader.load();
 
-        Group hull = horizontal ? buildHorizontalHull(length, width) : buildVerticalHull(width, length);
+            view.getChildren().clear();
 
-        hull.setOnMousePressed(e ->
-                System.out.println("PRESSED GROUP"));
+            view.getChildren().add(shipGraphic);
+            StackPane.setAlignment(shipGraphic, Pos.CENTER);
 
-        DropShadow shadow = UIEffects.softShadow();
-        view.setEffect(shadow);
+            view.setEffect(UIEffects.softShadow());
 
+            displayedOrientation = ship.getOrientation();
 
-        hull.setMouseTransparent(true);
+            if (ship.getOrientation() == Orientation.VERTICAL) {
 
+                view.setPrefWidth(CELL_SIZE);
+                view.setPrefHeight(ship.getSize() * CELL_SIZE);
+                view.setMinWidth(CELL_SIZE);
+                view.setMinHeight(ship.getSize()*CELL_SIZE);
 
+                view.setMaxWidth(CELL_SIZE);
+                view.setMaxHeight(ship.getSize()*CELL_SIZE);
 
-        view.getChildren().setAll(hull);
-    }
-
-    private Group buildHorizontalHull(double length, double width) {
-        Group group = new Group();
-
-        double bow = Math.min(width * 0.9, length * 0.25);
-
-        Polygon body = new Polygon(
-                0, width * 0.15,
-                length - bow, 0,
-                length, width * 0.5,
-                length - bow, width,
-                0, width * 0.85
-        );
-        body.setFill(hullGradient(true));
-        body.setStroke(Color.rgb(10, 20, 30, .8));
-        body.setStrokeWidth(1.2);
-        body.setEffect(UIEffects.hullShading());
-
-        Rectangle deckStripe = new Rectangle(width * 0.3, width * 0.32, length - width * 0.9, width * 0.14);
-        deckStripe.setArcWidth(6);
-        deckStripe.setArcHeight(6);
-        deckStripe.setFill(Color.rgb(255, 255, 255, .18));
-
-        group.getChildren().addAll(body, deckStripe);
-        addTurrets(group, length, width, true);
-        return group;
-    }
-
-    private Group buildVerticalHull(double width, double length) {
-        Group group = new Group();
-
-        double bow = Math.min(width * 0.9, length * 0.25);
-
-        Polygon body = new Polygon(
-                width * 0.15, 0,
-                0, length - bow,
-                width * 0.5, length,
-                width, length - bow,
-                width * 0.85, 0
-        );
-        body.setFill(hullGradient(false));
-        body.setStroke(Color.rgb(10, 20, 30, .8));
-        body.setStrokeWidth(1.2);
-        body.setEffect(UIEffects.hullShading());
-
-        Rectangle deckStripe = new Rectangle(width * 0.32, width * 0.3, width * 0.14, length - width * 0.9);
-        deckStripe.setArcWidth(6);
-        deckStripe.setArcHeight(6);
-        deckStripe.setFill(Color.rgb(255, 255, 255, .18));
-
-        group.getChildren().addAll(body, deckStripe);
-        addTurrets(group, width, length, false);
-        return group;
-    }
-
-    private void addTurrets(Group group, double length, double width, boolean horizontal) {
-        int turretCount = Math.max(1, ship.getSize() - 1);
-        double radius = width * 0.13;
-
-        for (int i = 0; i < turretCount; i++) {
-            double t = (i + 1) / (double) (turretCount + 1);
-            Circle turret = new Circle(radius);
-            turret.setFill(Color.rgb(40, 55, 65, .95));
-            turret.setStroke(Color.rgb(200, 220, 235, .5));
-            turret.setStrokeWidth(0.8);
-
-            if (horizontal) {
-                turret.setCenterX(length * t);
-                turret.setCenterY(width * 0.5);
             } else {
-                turret.setCenterX(width * 0.5);
-                turret.setCenterY(length * t);
+
+                view.setPrefWidth(ship.getSize() * CELL_SIZE);
+                view.setPrefHeight(CELL_SIZE);
+                view.setMinWidth(ship.getSize()*CELL_SIZE);
+                view.setMinHeight(CELL_SIZE);
+
+                view.setMaxWidth(ship.getSize()*CELL_SIZE);
+                view.setMaxHeight(CELL_SIZE);
+
+
             }
-            group.getChildren().add(turret);
+
         }
+
+        catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
     }
 
-    private LinearGradient hullGradient(boolean horizontal) {
-        if (horizontal) {
-            return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
-                    new Stop(0, Color.web("#7FB8DD")),
-                    new Stop(0.45, Color.web("#2E6E9E")),
-                    new Stop(1, Color.web("#123B57")));
+    private String getFXMLName() {
+
+        boolean vertical = ship.getOrientation() == Orientation.VERTICAL;
+
+        switch (ship.getType()) {
+
+            case AIRCRAFT:
+                return vertical ? "AircraftVertical.fxml"
+                        : "Aircraft.fxml";
+
+            case SUBMARINE:
+                return vertical ? "SubmarineVertical.fxml"
+                        : "Submarine.fxml";
+
+            case DESTROYER:
+                return vertical ? "DestroyerVertical.fxml"
+                        : "Destroyer.fxml";
+
+            case FRIGATE:
+                return vertical ? "FrigateVertical.fxml"
+                        : "Frigate.fxml";
+
+            default:
+                throw new IllegalStateException("Unknown ship");
         }
-        return new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#7FB8DD")),
-                new Stop(0.45, Color.web("#2E6E9E")),
-                new Stop(1, Color.web("#123B57")));
     }
 }

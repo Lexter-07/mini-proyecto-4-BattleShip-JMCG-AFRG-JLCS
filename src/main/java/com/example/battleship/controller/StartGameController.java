@@ -29,7 +29,6 @@ import java.util.List;
 public class StartGameController {
 
     @FXML private AnchorPane rootPane;
-    @FXML private StackPane Aircraft, Destroyer1, Destroyer2, Destroyer3, Frigate1, Frigate2, Frigate3, Frigate4, Submarine1, Submarine2;
     @FXML private GridPane seaGrid;
     @FXML private Button confirmButton;
 
@@ -72,19 +71,52 @@ public class StartGameController {
         yOffset = point.getY() - pane.getLayoutY();
 
         pane.toFront();
+
+        pane.setMouseTransparent(false);
+    }
+
+    private StackPane createShipPane(
+            double x,
+            double y,
+            ShipType type) {
+
+        StackPane pane = new StackPane();
+
+        pane.setLayoutX(x);
+        pane.setLayoutY(y);
+
+        pane.setPickOnBounds(true);
+
+        pane.setOnMousePressed(this::onMousePressedShip);
+        pane.setOnMouseDragged(this::onMouseDragged);
+        pane.setOnMouseReleased(this::onMouseReleased);
+
+        rootPane.getChildren().add(pane);
+
+        ShipView shipView =
+                new ShipView(pane, new Ship(type));
+
+        shipViews.put(pane, shipView);
+
+        return pane;
     }
 
     private void createShips() {
-        shipViews.put(Aircraft, new ShipView(Aircraft, new Ship(ShipType.AIRCRAFT)));
-        shipViews.put(Submarine1, new ShipView(Submarine1, new Ship(ShipType.SUBMARINE)));
-        shipViews.put(Submarine2, new ShipView(Submarine2, new Ship(ShipType.SUBMARINE)));
-        shipViews.put(Destroyer1, new ShipView(Destroyer1, new Ship(ShipType.DESTROYER)));
-        shipViews.put(Destroyer2, new ShipView(Destroyer2, new Ship(ShipType.DESTROYER)));
-        shipViews.put(Destroyer3, new ShipView(Destroyer3, new Ship(ShipType.DESTROYER)));
-        shipViews.put(Frigate1, new ShipView(Frigate1, new Ship(ShipType.FRIGATE)));
-        shipViews.put(Frigate2, new ShipView(Frigate2, new Ship(ShipType.FRIGATE)));
-        shipViews.put(Frigate3, new ShipView(Frigate3, new Ship(ShipType.FRIGATE)));
-        shipViews.put(Frigate4, new ShipView(Frigate4, new Ship(ShipType.FRIGATE)));
+
+        createShipPane(47,150, ShipType.AIRCRAFT);
+
+        createShipPane(47,315, ShipType.SUBMARINE);
+        createShipPane(47,366, ShipType.SUBMARINE);
+
+        createShipPane(47,205, ShipType.DESTROYER);
+        createShipPane(140,205, ShipType.DESTROYER);
+        createShipPane(47,256, ShipType.DESTROYER);
+
+        createShipPane(47,425, ShipType.FRIGATE);
+        createShipPane(97,425, ShipType.FRIGATE);
+        createShipPane(147,425, ShipType.FRIGATE);
+        createShipPane(197,425, ShipType.FRIGATE);
+
     }
 
     private void saveOriginalPositions() {
@@ -134,6 +166,7 @@ public class StartGameController {
 
         shipView.animateMoveTo(point.getX(), point.getY());
         pane.toFront();
+        pane.setMouseTransparent(false);
     }
 
 
@@ -195,6 +228,8 @@ public class StartGameController {
             }
 
             snapShip(shipView, ship.getStartCoordinate());
+            rootPane.applyCss();
+            rootPane.layout();
             shipView.playSnapEffect();
         }
         enableConfirmButton();
@@ -213,6 +248,10 @@ public class StartGameController {
         if (result != PlacementResult.SUCCESS) return;
         ship.setOrientation(newOrientation);
         selectedShipView.rotate();
+
+        rootPane.applyCss();
+        rootPane.layout();
+
         snapShip(selectedShipView, coordinate);
     }
 

@@ -1,0 +1,259 @@
+/* ===========================
+   BARCOS HORIZONTALES
+   =========================== */
+
+.ship-left{
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color: linear-gradient(to bottom,#90d4ff,#2f7ab7);
+
+    -fx-background-radius:20 0 0 20;
+    -fx-border-radius:20 0 0 20;
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2;
+}
+
+.ship-middle{
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color: linear-gradient(to bottom,#6cb7ef,#225f95);
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2 0 2 0;
+}
+
+.ship-right{
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color: linear-gradient(to bottom,#90d4ff,#2f7ab7);
+
+    -fx-background-radius:0 20 20 0;
+    -fx-border-radius:0 20 20 0;
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2;
+}
+
+/* ===========================
+   FRAGATA
+   =========================== */
+
+.ship-single{
+
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color:linear-gradient(to bottom,#90d4ff,#2f7ab7);
+
+    -fx-background-radius:20;
+
+    -fx-border-radius:20;
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2;
+}
+
+/* ===========================
+   BARCOS VERTICALES
+   =========================== */
+
+.ship-top{
+
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color:linear-gradient(to right,#90d4ff,#2f7ab7);
+
+    -fx-background-radius:20 20 0 0;
+
+    -fx-border-radius:20 20 0 0;
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2;
+}
+
+.ship-middle-v{
+
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color:linear-gradient(to right,#6cb7ef,#225f95);
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:0 2 0 2;
+}
+
+.ship-bottom{
+
+    -fx-pref-width:40;
+    -fx-pref-height:40;
+
+    -fx-background-color:linear-gradient(to right,#90d4ff,#2f7ab7);
+
+    -fx-background-radius:0 0 20 20;
+
+    -fx-border-radius:0 0 20 20;
+
+    -fx-border-color:#183a5d;
+    -fx-border-width:2;
+}
+
+/* ========================================= */
+/* PORTAAVIONES */
+/* ========================================= */
+
+.carrier-hull{
+
+    -fx-fill:
+            linear-gradient(
+                    to bottom,
+                    #8d949a 0%,
+                    #72787f 45%,
+                    #4b5055 100%);
+
+    -fx-stroke:#232323;
+    -fx-stroke-width:1.3;
+}
+
+.carrier-deck{
+
+    -fx-fill:
+            linear-gradient(
+                    to bottom,
+                    #5b5f64,
+                    #383b3f);
+
+    -fx-stroke:#8c939a;
+}
+
+.carrier-island{
+
+    -fx-fill:
+            linear-gradient(
+                    to bottom,
+                    #7d8388,
+                    #474b50);
+
+    -fx-stroke:#1d1d1d;
+}
+
+.carrier-tower{
+
+    -fx-fill:#d6d6d6;
+}
+
+.carrier-radar{
+
+    -fx-fill:#ededed;
+}
+
+.deck-center{
+
+    -fx-stroke:white;
+    -fx-stroke-width:1.6;
+}
+
+.deck-line{
+
+    -fx-stroke:#bdbdbd;
+    -fx-stroke-width:0.8;
+}
+
+.landing-mark{
+
+    -fx-fill:#ffd740;
+}
+
+.carrier-hull{
+    -fx-fill: linear-gradient(to bottom,#667786,#2d3945);
+    -fx-stroke:#0f151a;
+    -fx-stroke-width:1.5;
+}
+
+.carrier-deck{
+    -fx-fill:#8d949c;
+    -fx-stroke:#d8dde2;
+    -fx-stroke-width:0.7;
+}
+
+.carrier-island{
+    -fx-fill:#616971;
+    -fx-stroke:#d4d7db;
+}
+
+.carrier-bridge{
+    -fx-fill:#aeb8c2;
+}
+
+.window{
+    -fx-fill:#8ed8ff;
+}
+
+.deck-center{
+    -fx-stroke:white;
+    -fx-stroke-width:1.5;
+}
+
+.deck-line{
+    -fx-stroke:#d8d8d8;
+    -fx-stroke-width:0.7;
+}
+
+.landing-mark{
+    -fx-fill:white;
+}
+
+.antenna{
+    -fx-stroke:#eeeeee;
+    -fx-stroke-width:1;
+}
+
+.carrier-radar{
+    -fx-fill:#ff5555;
+}
+
+.ship-light{
+    -fx-fill:#ffff9a;
+}
+
+.carrier-hull{
+    -fx-fill:linear-gradient(to bottom,#7b7b7b,#545454);
+    -fx-stroke:#2b2b2b;
+    -fx-stroke-width:1.2;
+}
+
+.carrier-deck{
+    -fx-fill:#6b6b6b;
+}
+
+.carrier-island{
+    -fx-fill:#4f4f4f;
+}
+
+.carrier-bridge{
+    -fx-fill:#8f8f8f;
+}
+
+.carrier-elevator{
+    -fx-fill:#9f9f9f;
+    -fx-stroke:#5d5d5d;
+}
+
+.deck-center{
+    -fx-stroke:white;
+    -fx-stroke-width:1.2;
+}
+
+.deck-runway{
+    -fx-stroke:white;
+    -fx-stroke-width:0.8;
+    -fx-stroke-dash-array:4 3;
+}
+
+.landing-mark{
+    -fx-fill:white;
+}
